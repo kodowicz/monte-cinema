@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_23_124628) do
+ActiveRecord::Schema.define(version: 2021_05_20_121949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,28 +18,6 @@ ActiveRecord::Schema.define(version: 2021_05_23_124628) do
   create_table "cinema_halls", force: :cascade do |t|
     t.string "hall_name"
     t.integer "hall_size"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "reservations", force: :cascade do |t|
-    t.boolean "paid", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "ticket_desks", force: :cascade do |t|
-    t.string "name"
-    t.string "type"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "tickets", force: :cascade do |t|
-    t.string "movie_title"
-    t.string "seat"
-    t.string "type"
-    t.float "price"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
