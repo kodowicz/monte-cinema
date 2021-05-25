@@ -20,7 +20,9 @@ class ReservationsController < ApplicationController
   def create
     @ticket_desk = TicketDesk.find(params[:ticket_desk_id])
     @reservation = @ticket_desk.reservations.create(reservation_params[:paid])
-    @ticket = @reservation.tickets.insert_all(reservation_params[:tickets])
+    reservation_params[:tickets].each do |ticket_params|
+      @reservation.tickets.create(ticket_params)
+    end
 
     if @reservation.save
       render json: render_reservation(@reservation), status: :created
@@ -62,6 +64,6 @@ class ReservationsController < ApplicationController
   end
 
   def reservation_params
-    params.require(:reservation).permit(:paid, :tickets)
+    params.require(:reservation).permit(:paid, tickets: %i[price seat type])
   end
 end
