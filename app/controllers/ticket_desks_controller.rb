@@ -3,14 +3,6 @@
 class TicketDesksController < ApplicationController
   before_action :set_ticket_desk, only: %i[show update destroy]
 
-  # GET /ticket_desks
-  def index
-    @ticket_desks = TicketDesk.all.map do |desk|
-      render_ticket_desk(desk)
-    end
-    render json: @ticket_desks
-  end
-
   # GET /ticket_desks/:ticket_desk_id
   def show
     render json: render_ticket_desk(@ticket_desk)
@@ -21,7 +13,7 @@ class TicketDesksController < ApplicationController
     @ticket_desk = TicketDesk.create(ticket_desk_params)
 
     if @ticket_desk.save
-      render json: @ticket_desk, status: :created, location: @ticket_desk
+      render json: @ticket_desk, status: :created
     else
       render json: @ticket_desk.errors, status: :unprocessable_entity
     end
@@ -50,8 +42,7 @@ class TicketDesksController < ApplicationController
   def render_ticket_desk(ticket_desk)
     {
       id: ticket_desk.id,
-      name: ticket_desk.name,
-      type: ticket_desk.type
+      online: ticket_desk.online
     }
   end
 
@@ -60,6 +51,6 @@ class TicketDesksController < ApplicationController
   end
 
   def ticket_desk_params
-    params.require(:ticket_desk).permit(:type, :name)
+    params.require(:ticket_desk).permit(:online)
   end
 end

@@ -1,3 +1,3 @@
 class TicketDesk < ApplicationRecord
-  self.inheritance_column = :_type_disabled
+  has_many :reservations, dependent: :destroy
 end

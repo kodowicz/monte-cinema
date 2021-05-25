@@ -5,9 +5,10 @@ class TicketsController < ApplicationController
 
   # GET /tickets
   def index
-    @tickets = Ticket.all.map do |res|
-      render_ticket(res)
-    end
+    @tickets = TicketDesk.find(params[:ticket_desk_id]).reservations.find(params[:reservation_id]).tickets
+    # @tickets = Ticket.all.map do |res|
+    #   render_ticket(res)
+    # end
     render json: @tickets
   end
 
@@ -21,7 +22,7 @@ class TicketsController < ApplicationController
     @ticket = Ticket.create(ticket_params)
 
     if @ticket.save
-      render json: @ticket, status: :created, location: @ticket
+      render json: @ticket, status: :created
     else
       render json: @ticket.errors, status: :unprocessable_entity
     end

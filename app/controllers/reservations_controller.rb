@@ -5,7 +5,7 @@ class ReservationsController < ApplicationController
 
   # GET /reservations
   def index
-    @reservations = Reservation.all.map do |res|
+    @reservations = TicketDesk.find(params[:ticket_desk_id]).reservations.map do |res|
       render_reservation(res)
     end
     render json: @reservations
@@ -18,10 +18,12 @@ class ReservationsController < ApplicationController
 
   # POST /reservations/
   def create
-    @reservation = Reservation.create(reservation_params)
+    @ticket_desk = TicketDesk.find(params[:ticket_desk_id])
+    @reservation = @ticket_desk.reservations.create(reservation_params[:paid])
+    @ticket = @reservation.tickets.insert_all(reservation_params[:tickets])
 
     if @reservation.save
-      render json: @reservation, status: :created, location: @reservation
+      render json: render_reservation(@reservation), status: :created
     else
       render json: @reservation.errors, status: :unprocessable_entity
     end
@@ -30,7 +32,7 @@ class ReservationsController < ApplicationController
   # PUT /reservations/:reservation_id
   def update
     if @reservation.update!(reservation_params)
-      render json: @reservation, status: :ok
+      render json: render_reservation(@reservation), status: :ok
     else
       render json: @reservation.errors, status: :unprocessable_entity
     end
@@ -39,7 +41,7 @@ class ReservationsController < ApplicationController
   # DELETE /reservations/:reservation_id
   def destroy
     if @reservation.destroy!
-      render json: @reservation, status: :ok
+      render json: render_reservation(@reservation), status: :ok
     else
       render json: @reservation.errors, status: :unprocessable_entity
     end
@@ -55,10 +57,11 @@ class ReservationsController < ApplicationController
   end
 
   def set_reservation
-    @reservation = Reservation.find(params[:id])
+    @ticket_desk = TicketDesk.find(params[:ticket_desk_id])
+    @reservation = @ticket_desk.reservation.find(params[:id])
   end
 
   def reservation_params
-    params.require(:reservation).permit(:paid)
+    params.require(:reservation).permit(:paid, :tickets)
   end
 end
