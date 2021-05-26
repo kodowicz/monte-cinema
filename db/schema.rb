@@ -10,16 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_25_132359) do
+ActiveRecord::Schema.define(version: 2021_05_26_193217) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "cinema_halls", force: :cascade do |t|
+    t.string "name"
+    t.integer "capacity"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "capacity"
+  end
+
+  create_table "clients", force: :cascade do |t|
     t.string "name"
+    t.string "email"
+    t.integer "age"
+    t.boolean "real_user"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "movies", force: :cascade do |t|
@@ -36,6 +45,10 @@ ActiveRecord::Schema.define(version: 2021_05_25_132359) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ticket_desk_id", null: false
+    t.bigint "client_id", null: false
+    t.bigint "screening_id", null: false
+    t.index ["client_id"], name: "index_reservations_on_client_id"
+    t.index ["screening_id"], name: "index_reservations_on_screening_id"
     t.index ["ticket_desk_id"], name: "index_reservations_on_ticket_desk_id"
   end
 
@@ -57,18 +70,22 @@ ActiveRecord::Schema.define(version: 2021_05_25_132359) do
   end
 
   create_table "tickets", force: :cascade do |t|
-    t.string "movie_title"
     t.string "seat"
     t.string "type"
     t.float "price"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "reservation_id", null: false
+    t.bigint "movie_id", null: false
+    t.index ["movie_id"], name: "index_tickets_on_movie_id"
     t.index ["reservation_id"], name: "index_tickets_on_reservation_id"
   end
 
+  add_foreign_key "reservations", "clients"
+  add_foreign_key "reservations", "screenings"
   add_foreign_key "reservations", "ticket_desks"
   add_foreign_key "screenings", "cinema_halls"
   add_foreign_key "screenings", "movies"
+  add_foreign_key "tickets", "movies"
   add_foreign_key "tickets", "reservations"
 end
