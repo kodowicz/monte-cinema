@@ -19,11 +19,13 @@ ActiveRecord::Schema.define(version: 2021_05_25_132359) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "capacity"
+    t.string "name"
   end
 
   create_table "movies", force: :cascade do |t|
     t.string "title"
     t.string "genre"
+    t.integer "duration"
     t.integer "age_restriction", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -38,7 +40,8 @@ ActiveRecord::Schema.define(version: 2021_05_25_132359) do
   end
 
   create_table "screenings", force: :cascade do |t|
-    t.datetime "start_date"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
     t.bigint "cinema_hall_id", null: false
     t.bigint "movie_id", null: false
     t.datetime "created_at", precision: 6, null: false

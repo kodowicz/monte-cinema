@@ -1,9 +1,17 @@
 Rails.application.routes.draw do
-  resources :ticket_desks, only: %i[show create update destroy] do 
-    resources :reservations, only: %i[index show create update destroy] do 
+  resources :ticket_desks, only: %i[show create update destroy] do
+    resources :reservations, only: %i[index show create update destroy] do
       resources :tickets, only: %i[index show destroy]
     end
-  end 
+  end
 
-  resources :cinema_halls
+  # create screenings of a movie in available halls
+  resources :cinema_halls, only: %i[show create update destroy] do
+    resources :screenings, only: %i[index create update destroy]
+  end
+
+  # get all available screenings of a movie for a user
+  resources :movies, only: %i[show create update destroy] do
+    resources :screenings, only: %i[index]
+  end
 end
