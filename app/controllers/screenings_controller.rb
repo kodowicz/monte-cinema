@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 class ScreeningsController < ApplicationController
-  before_action :set_screening, only: %i[show update destroy]
-  before_action :set_screenings, only: %i[index create]
-
   # GET /screenings
   def index
+    @screenings = set_screenings
+    
     @screenings.map do |screening|
       render_screening(screening)
     end
@@ -14,22 +13,27 @@ class ScreeningsController < ApplicationController
 
   # GET /screenings/:id
   def show
-    render json: @screening
+    @screening = set_screening
+
+    render json: render_screening(@screening)
   end
 
-  # POST /screenings/ body with movie_id
+  # POST /screenings/
   def create
-    @screening = @screenings.create(screening_params)
+    @screenings = set_screenings
+    screening = @screenings.create(screening_params)
 
-    if @screening.save
-      render json: render_screening(@screening), status: :created
+    if @screening.valid?
+      render json: render_screening(screening), status: :created
     else
-      render json: @screening.errors, status: :unprocessable_entity
+      render json: screening.errors, status: :unprocessable_entity
     end
   end
 
   # PUT /screenings/:id
   def update
+    @screening = set_screening
+
     if @screening.update(screening_params)
       render json: render_screening(@screening), status: :ok
     else
@@ -39,6 +43,8 @@ class ScreeningsController < ApplicationController
 
   # DELETE /screenings/:id
   def destroy
+    @screening = set_screening
+
     if @screening.destroy
       render json: render_screening(@screening), status: :ok
     else
@@ -65,7 +71,6 @@ class ScreeningsController < ApplicationController
     @screening = Screening.find(params[:id])
   end
 
-  # improve to get starts_at and duration then create ends_at
   def screening_params
     params.require(:screening).permit(:movie_id, :starts_at, :ends_at)
   end
