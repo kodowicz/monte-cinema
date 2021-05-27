@@ -33,7 +33,7 @@ class MoviesController < ApplicationController
   end
 
   private
-
+  
   def movie
     movie ||= Movie.find(params[:id])
   end

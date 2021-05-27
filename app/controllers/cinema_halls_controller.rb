@@ -28,6 +28,7 @@ class CinemaHallsController < ApplicationController
   # PUT /cinema_halls/:id
   def update
     if cinema_hall.update(cinema_hall_params)
+
       render json: render_cinema_hall(@cinema_hall), status: :ok
     else
       render json: @cinema_hall.errors, status: :unprocessable_entity

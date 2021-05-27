@@ -36,7 +36,6 @@ class ReservationsController < ApplicationController
       else
         render json: reservation.errors, status: :unprocessable_entity
       end
-
     else
       render json: { error: 'The screening does not have enough available seats' }, status: :unprocessable_entity
     end
