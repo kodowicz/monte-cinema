@@ -3,44 +3,39 @@
 class MoviesController < ApplicationController
   # GET /movies
   def index
-    movies = Movie.all
-
-    render json: movies
+    movies = Movie.where('title LIKE ?', "%#{movie_params[:title]}%")
+    render json: movies, status: :ok
   end
 
   # GET /movies/:id
   def show
-    @movie = set_movie
-
-    render json: @movie
+    render json: movie, status: :ok
   end
 
   # POST /movies
   def create
     movie = Movie.create(movie_params)
 
-    if @movie.valid?
-      render json: @movie, status: :created
+    if movie.save
+      render json: movie, status: :created
     else
-      render json: @movie.errors, status: :unprocessable_entity
+      render json: movie.errors, status: :unprocessable_entity
     end
   end
 
   # DELETE /movies/:id
   def destroy
-    @movie = set_movie
-
-    if @movie.destroy
-      render json: @movie, status: :ok
+    if movie.destroy
+      render json: movie, status: :ok
     else
-      render json: @movie.errors, status: :unprocessable_entity
+      render json: movie.errors, status: :unprocessable_entity
     end
   end
 
   private
-
-  def set_movie
-    @movie = Movie.find(params[:id])
+  
+  def movie
+    movie ||= Movie.find(params[:id])
   end
 
   def movie_params

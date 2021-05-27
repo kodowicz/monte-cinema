@@ -11,9 +11,7 @@ class CinemaHallsController < ApplicationController
 
   # GET /cinema_halls/:id
   def show
-    @cinema_hall = set_cinema_hall
-
-    render json: render_cinema_hall(@cinema_hall)
+    render json: render_cinema_hall(cinema_hall)
   end
 
   # POST /cinema_halls/
@@ -29,9 +27,8 @@ class CinemaHallsController < ApplicationController
 
   # PUT /cinema_halls/:id
   def update
-    @cinema_hall = set_cinema_hall
+    if cinema_hall.update(cinema_hall_params)
 
-    if @cinema_hall.update(cinema_hall_params)
       render json: render_cinema_hall(@cinema_hall), status: :ok
     else
       render json: @cinema_hall.errors, status: :unprocessable_entity
@@ -40,12 +37,10 @@ class CinemaHallsController < ApplicationController
 
   # DELETE /cinema_halls/:id
   def destroy
-    @cinema_hall = set_cinema_hall
-
-    if @cinema_hall.destroy
-      render json: render_cinema_hall(@cinema_hall), status: :ok
+    if cinema_hall.destroy
+      render json: render_cinema_hall(cinema_hall), status: :ok
     else
-      render json: @cinema_hall.errors, status: :unprocessable_entity
+      render json: cinema_hall.errors, status: :unprocessable_entity
     end
   end
 
@@ -59,8 +54,8 @@ class CinemaHallsController < ApplicationController
     }
   end
 
-  def set_cinema_hall
-    @cinema_hall = CinemaHall.find(params[:id])
+  def cinema_hall
+    cinema_hall = CinemaHall.find(params[:id])
   end
 
   def cinema_hall_params
