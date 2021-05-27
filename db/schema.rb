@@ -10,14 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_25_093938) do
+ActiveRecord::Schema.define(version: 2021_05_25_132359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "cinema_halls", force: :cascade do |t|
-    t.string "hall_name"
-    t.integer "hall_size"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "capacity"
+    t.string "name"
+  end
+
+  create_table "movies", force: :cascade do |t|
+    t.string "title"
+    t.string "genre"
+    t.integer "duration"
+    t.integer "age_restriction", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -28,6 +37,17 @@ ActiveRecord::Schema.define(version: 2021_05_25_093938) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ticket_desk_id", null: false
     t.index ["ticket_desk_id"], name: "index_reservations_on_ticket_desk_id"
+  end
+
+  create_table "screenings", force: :cascade do |t|
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.bigint "cinema_hall_id", null: false
+    t.bigint "movie_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cinema_hall_id"], name: "index_screenings_on_cinema_hall_id"
+    t.index ["movie_id"], name: "index_screenings_on_movie_id"
   end
 
   create_table "ticket_desks", force: :cascade do |t|
@@ -48,5 +68,7 @@ ActiveRecord::Schema.define(version: 2021_05_25_093938) do
   end
 
   add_foreign_key "reservations", "ticket_desks"
+  add_foreign_key "screenings", "cinema_halls"
+  add_foreign_key "screenings", "movies"
   add_foreign_key "tickets", "reservations"
 end
