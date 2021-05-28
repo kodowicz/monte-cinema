@@ -1,44 +1,39 @@
-# frozen_string_literal: true
-
 class CinemaHallsController < ApplicationController
-  # GET /cinema_halls
   def index
-    cinema_halls = CinemaHall.all.map do |hall|
-      render_cinema_hall(hall)
-    end
-    render json: cinema_halls
+    cinema_halls = CinemaHalls::UseCases::FetchAll.new.call
+    render json: CinemaHalls::Representers::All.new(cinema_halls).basic
   end
 
-  # GET /cinema_halls/:id
   def show
-    render json: render_cinema_hall(cinema_hall)
+    cinema_hall = CinemaHalls::UseCases::Find.new.call(id: params[:id])
+    render json: CinemaHalls::Representers::Single.new(cinema_hall).basic
   end
-
-  # POST /cinema_halls/
+  
   def create
-    cinema_call = CinemaHall.create(cinema_hall_params)
+    cinema_hall = CinemaHalls::UseCases::Create.new.call(params: cinema_hall_params)
 
     if cinema_hall.valid?
-      render json: render_cinema_hall(cinema_hall), status: :created
+      render json: CinemaHalls::Representers::Single.new(cinema_hall).basic, status: :created, location: cinema_hall
     else
       render json: cinema_hall.errors, status: :unprocessable_entity
     end
   end
 
-  # PUT /cinema_halls/:id
   def update
-    if cinema_hall.update(cinema_hall_params)
-
-      render json: render_cinema_hall(@cinema_hall), status: :ok
+    cinema_hall = CinemaHalls::UseCases::Update.new.call(id: params[:id], params: cinema_hall_params)
+    
+    if cinema_hall.valid?
+      render json: CinemaHalls::Representers::Single.new(cinema_hall).basic
     else
-      render json: @cinema_hall.errors, status: :unprocessable_entity
+      render json: cinema_hall.errors, status: :unprocessable_entity
     end
   end
 
-  # DELETE /cinema_halls/:id
   def destroy
-    if cinema_hall.destroy
-      render json: render_cinema_hall(cinema_hall), status: :ok
+    cinema_hall = CinemaHalls::UseCases::Delete.new.call(id: params[:id])
+
+    if cinema_hall.valid?
+      render json: CinemaHalls::Representers::Single.new(cinema_hall).basic
     else
       render json: cinema_hall.errors, status: :unprocessable_entity
     end
@@ -46,19 +41,7 @@ class CinemaHallsController < ApplicationController
 
   private
 
-  def render_cinema_hall(cinema_hall)
-    {
-      id: cinema_hall.id,
-      name: cinema_hall.name,
-      capacity: cinema_hall.capacity
-    }
-  end
-
-  def cinema_hall
-    cinema_hall = CinemaHall.find(params[:id])
-  end
-
   def cinema_hall_params
-    params.require(:cinema_hall).permit(:capacity, :name)
+    params.require(:cinema_hall).permit(:name, :capacity)
   end
 end

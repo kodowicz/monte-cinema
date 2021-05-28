@@ -1,0 +1,19 @@
+module CinemaHalls
+  module Representers
+    class Single
+      attr_reader :cinema_hall
+
+      def initialize(cinema_hall)
+        @cinema_hall = cinema_hall
+      end
+
+      def basic
+        {
+          id: cinema_hall.id,
+          name: cinema_hall.name,
+          capacity: cinema_hall.capacity
+        }
+      end
+    end
+  end
+end
