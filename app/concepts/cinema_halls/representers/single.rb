@@ -11,7 +11,8 @@ module CinemaHalls
         {
           id: cinema_hall.id,
           name: cinema_hall.name,
-          capacity: cinema_hall.capacity
+          capacity: cinema_hall.capacity,
+          seats: cinema_hall.seats
         }
       end
     end

@@ -9,11 +9,7 @@ module CinemaHalls
 
       def basic
         cinema_halls.map do |cinema_hall|
-          {
-            id: cinema_hall.id,
-            name: cinema_hall.name,
-            capacity: cinema_hall.capacity
-          }
+          Single.new(cinema_hall).basic
         end
       end
     end

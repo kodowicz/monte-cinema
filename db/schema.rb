@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_193217) do
     t.integer "capacity"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "seats", default: [], array: true
   end
 
   create_table "clients", force: :cascade do |t|

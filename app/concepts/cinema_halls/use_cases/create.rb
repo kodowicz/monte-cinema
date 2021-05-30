@@ -8,6 +8,12 @@ module CinemaHalls
       end
 
       def call(params:)
+        seats = CinemaHalls::UseCases::CreateSeats.new(params: params).call
+        params[:seats] = seats
+        params.delete(:rows)
+        params.delete(:columns)
+        params.delete(:not_available)
+
         repository.create(params)
       end
     end
