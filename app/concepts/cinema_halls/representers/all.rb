@@ -12,6 +12,12 @@ module CinemaHalls
           Single.new(cinema_hall).basic
         end
       end
+
+      def extended
+        cinema_halls.map do |cinema_hall|
+          Single.new(cinema_hall).extended
+        end
+      end
     end
   end
 end

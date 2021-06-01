@@ -1,11 +1,11 @@
 class CinemaHallsController < ApplicationController
   def index
-    cinema_halls = CinemaHalls::UseCases::FetchAll.new.call
+    cinema_halls = CinemaHalls::Repository.new.find_all
     render json: CinemaHalls::Representers::All.new(cinema_halls).basic
   end
 
   def show
-    cinema_hall = CinemaHalls::UseCases::Find.new.call(id: params[:id])
+    cinema_hall = CinemaHalls::Repository.new.find(params[:id])
     render json: CinemaHalls::Representers::Single.new(cinema_hall).basic
   end
 
@@ -13,7 +13,7 @@ class CinemaHallsController < ApplicationController
     cinema_hall = CinemaHalls::UseCases::Create.new.call(params: permit_params)
 
     if cinema_hall.valid?
-      render json: CinemaHalls::Representers::Single.new(cinema_hall).basic, status: :created, location: cinema_hall
+      render json: CinemaHalls::Representers::Single.new(cinema_hall).basic, status: :created
     else
       render json: cinema_hall.errors, status: :unprocessable_entity
     end
