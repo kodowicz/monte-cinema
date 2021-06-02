@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   end
 
   # create screenings of a movie in available halls
-  resources :cinema_halls, only: %i[show create update destroy] do
+  resources :cinema_halls, only: %i[index show create update destroy] do
     resources :screenings, only: %i[index create update destroy]
   end
 

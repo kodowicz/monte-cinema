@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(version: 2021_05_26_193217) do
     t.integer "capacity"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "seats", default: [], array: true
+    t.text "not_available", default: [], array: true
   end
 
   create_table "clients", force: :cascade do |t|
@@ -77,6 +79,8 @@ ActiveRecord::Schema.define(version: 2021_05_26_193217) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "reservation_id", null: false
     t.bigint "movie_id", null: false
+    t.bigint "cinema_hall_id", null: false
+    t.index ["cinema_hall_id"], name: "index_tickets_on_cinema_hall_id"
     t.index ["movie_id"], name: "index_tickets_on_movie_id"
     t.index ["reservation_id"], name: "index_tickets_on_reservation_id"
   end
@@ -86,6 +90,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_193217) do
   add_foreign_key "reservations", "ticket_desks"
   add_foreign_key "screenings", "cinema_halls"
   add_foreign_key "screenings", "movies"
+  add_foreign_key "tickets", "cinema_halls"
   add_foreign_key "tickets", "movies"
   add_foreign_key "tickets", "reservations"
 end

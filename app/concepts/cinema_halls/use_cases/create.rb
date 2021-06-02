@@ -8,7 +8,10 @@ module CinemaHalls
       end
 
       def call(params:)
-        repository.create(params)
+        seats = GenerateSeats.new(params: params).call
+        permit_params = CinemaHalls::Processors::ModifyParams.new(params: params, seats: seats).call
+
+        repository.create(permit_params)
       end
     end
   end
