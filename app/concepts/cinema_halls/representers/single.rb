@@ -14,6 +14,15 @@ module CinemaHalls
           id: cinema_hall.id,
           name: cinema_hall.name,
           capacity: cinema_hall.capacity,
+          seats: seats
+        }
+      end
+
+      def extended
+        {
+          id: cinema_hall.id,
+          name: cinema_hall.name,
+          capacity: cinema_hall.capacity,
           seats: seats,
           screenings: screenings
         }
@@ -22,7 +31,7 @@ module CinemaHalls
       private
 
       def screenings
-        screenings ||= Screenings::Representers::All.new(cinema_hall.screenings).basic
+        @screenings ||= Screenings::Representers::All.new(cinema_hall.screenings).basic
       end
 
       def seat_available?(seat)
@@ -32,10 +41,9 @@ module CinemaHalls
       def seats
         @seats.map do |row|
           row.map do |seat|
-            available = seat_available?(seat)
             {
               seat: seat,
-              available: available
+              available: seat_available?(seat)
             }
           end
         end

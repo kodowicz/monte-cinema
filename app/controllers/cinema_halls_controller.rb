@@ -1,12 +1,22 @@
 class CinemaHallsController < ApplicationController
   def index
     cinema_halls = CinemaHalls::Repository.new.find_all
-    render json: CinemaHalls::Representers::All.new(cinema_halls).basic
+
+    if permit_params[:extended]
+      render json: CinemaHalls::Representers::All.new(cinema_halls).extended
+    else
+      render json: CinemaHalls::Representers::All.new(cinema_halls).basic
+    end
   end
 
   def show
     cinema_hall = CinemaHalls::Repository.new.find(params[:id])
-    render json: CinemaHalls::Representers::Single.new(cinema_hall).basic
+
+    if permit_params[:extended]
+      render json: CinemaHalls::Representers::Single.new(cinema_hall).extended
+    else
+      render json: CinemaHalls::Representers::Single.new(cinema_hall).basic
+    end
   end
 
   def create
@@ -30,18 +40,20 @@ class CinemaHallsController < ApplicationController
   end
 
   def destroy
-    cinema_hall = CinemaHalls::UseCases::Delete.new.call(id: params[:id])
-
-    if cinema_hall.valid?
-      render json: { message: "Hall #{cinema_hall.id} has been deleted successfuly" }
-    else
-      render json: cinema_hall.errors, status: :unprocessable_entity
-    end
+    CinemaHalls::UseCases::Delete.new.call(id: params[:id])
   end
 
   private
 
   def permit_params
-    params.require(:cinema_hall).permit(:name, :capacity, rows: [], columns: [], not_available: [], seats: [])
+    params.require(:cinema_hall).permit(
+      :name,
+      :capacity,
+      :extended,
+      rows: [],
+      columns: [],
+      not_available: [],
+      seats: []
+    )
   end
 end
