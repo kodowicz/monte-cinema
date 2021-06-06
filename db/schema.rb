@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_26_193217) do
+ActiveRecord::Schema.define(version: 2021_06_04_115323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,12 +43,13 @@ ActiveRecord::Schema.define(version: 2021_05_26_193217) do
   end
 
   create_table "reservations", force: :cascade do |t|
-    t.boolean "paid", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ticket_desk_id", null: false
     t.bigint "client_id", null: false
     t.bigint "screening_id", null: false
+    t.datetime "expires_at", null: false
+    t.integer "status", default: 0, null: false
     t.index ["client_id"], name: "index_reservations_on_client_id"
     t.index ["screening_id"], name: "index_reservations_on_screening_id"
     t.index ["ticket_desk_id"], name: "index_reservations_on_ticket_desk_id"
@@ -73,13 +74,13 @@ ActiveRecord::Schema.define(version: 2021_05_26_193217) do
 
   create_table "tickets", force: :cascade do |t|
     t.string "seat"
-    t.string "type"
     t.float "price"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "reservation_id", null: false
     t.bigint "movie_id", null: false
     t.bigint "cinema_hall_id", null: false
+    t.integer "ticket_type", default: 0, null: false
     t.index ["cinema_hall_id"], name: "index_tickets_on_cinema_hall_id"
     t.index ["movie_id"], name: "index_tickets_on_movie_id"
     t.index ["reservation_id"], name: "index_tickets_on_reservation_id"
