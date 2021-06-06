@@ -32,6 +32,7 @@ module Reservations
           {
             ticket_desk_id: ticket_desk_id,
             expires_at: expires_at,
+            client_id: client_type,
             status: status
           }
         )
@@ -57,12 +58,20 @@ module Reservations
         @screening ||= Screenings::Repository.new.find(params[:screening_id])
       end
 
+      def fake_client
+        @fake_client ||= Clients::Repository.new.fake_client
+      end
+
       def expires_at
         screening.starts_at - 30.minute
       end
 
       def status
         ticket_desk.online ? "pending" : "paid"
+      end
+
+      def client_type
+        ticket_desk.online ? params[:client_id] : fake_client.id
       end
     end
   end

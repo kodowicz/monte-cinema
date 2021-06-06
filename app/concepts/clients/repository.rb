@@ -1,13 +1,13 @@
-module Tickets
+module Clients
   class Repository < ::Base::BaseRepository
     attr_reader :adapter
 
-    def initialize(adapter: Ticket)
+    def initialize(adapter: Client)
       super(adapter: adapter)
     end
 
-    def fetch_where(filter:)
-      adapter.where(filter)
+    def fake_client
+      adapter.where(real_user: false)
     end
   end
 end
