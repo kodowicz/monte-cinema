@@ -21,6 +21,8 @@ module Reservations
               screening: screening,
               tickets_params: tickets_params
             ).call
+
+            CancelReservationsJob.set(wait: 30.seconds).perform_later(reservation.id) if ticket_desk.online
           end
         end
       end
