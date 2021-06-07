@@ -4,7 +4,7 @@ module CinemaHalls
       attr_reader :cinema_halls
 
       def initialize(cinema_halls)
-        @cinema_halls = cinema_halls
+        @cinema_halls = cinema_halls.includes(:screenings)
       end
 
       def basic
