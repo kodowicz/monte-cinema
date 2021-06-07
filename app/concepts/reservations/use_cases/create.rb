@@ -59,7 +59,7 @@ module Reservations
       end
 
       def fake_client
-        @fake_client ||= Clients::Repository.new.fake_client
+        @fake_client ||= Clients::Repository.new.fake_client.first
       end
 
       def expires_at
