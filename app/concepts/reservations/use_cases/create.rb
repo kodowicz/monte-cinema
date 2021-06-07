@@ -14,7 +14,7 @@ module Reservations
       def call
         Reservation.transaction do
           repository.create(reservation_params).tap do |reservation|
-            raise ReservationInvalidError, "Couldn't create reservation" if reservation.invalid?
+            raise ReservationInvalidError, "Couldn't create reservation" unless reservation.persisted?
 
             Tickets::UseCases::CreateForReservation.new(
               reservation: reservation,
@@ -59,7 +59,7 @@ module Reservations
       end
 
       def fake_client
-        @fake_client ||= Clients::Repository.new.fake_client.first
+        @fake_client ||= Clients::Repository.new.fake_client
       end
 
       def expires_at

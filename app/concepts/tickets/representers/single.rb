@@ -13,14 +13,8 @@ module Tickets
           seat: ticket.seat,
           price: ticket.price,
           ticket_type: ticket.ticket_type,
-          hall: cinema_hall.name
+          hall: ticket.cinema_hall.name
         }
-      end
-
-      private
-
-      def cinema_hall
-        CinemaHalls::Repository.new.find(ticket.cinema_hall_id)
       end
     end
   end

@@ -1,7 +1,7 @@
 module CinemaHalls
   module Processors
     class ModifyParams
-      attr_reader :params, :seats
+      attr_reader :seats
 
       def initialize(params:, seats:)
         @permit_params = params
@@ -9,9 +9,11 @@ module CinemaHalls
       end
 
       def call
-        @permit_params[:seats] = seats
-        @permit_params[:not_available].map!(&:upcase)
-        @permit_params.except(:columns, :rows)
+        if seats
+          @permit_params[:seats] = seats if seats
+          @permit_params[:not_available].map!(&:upcase)
+        end
+        @permit_params.except(:columns, :rows, :extended)
       end
     end
   end

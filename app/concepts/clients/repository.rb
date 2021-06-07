@@ -7,7 +7,7 @@ module Clients
     end
 
     def fake_client
-      adapter.where(real_user: false)
+      adapter.where(real_user: false).first
     end
   end
 end

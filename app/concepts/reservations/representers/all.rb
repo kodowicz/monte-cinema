@@ -4,7 +4,7 @@ module Reservations
       attr_reader :reservations
 
       def initialize(reservations)
-        @reservations = reservations
+        @reservations = reservations.includes(:tickets)
       end
 
       def basic

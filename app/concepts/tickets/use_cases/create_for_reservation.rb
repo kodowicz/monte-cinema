@@ -18,7 +18,7 @@ module Tickets
 
           tickets_params.each do |params|
             ticket = reservation.tickets.create(params)
-            raise SeatsNotAvailableError, "Provided parameters are invalid" if ticket.invalid?
+            raise SeatsNotAvailableError, "Provided parameters are invalid" unless ticket.persisted?
           end
         end
       end
