@@ -1,7 +1,6 @@
 module CinemaHalls
   module Processors
     class ModifyParams
-
       attr_reader :seats
 
       def initialize(params:, seats:)

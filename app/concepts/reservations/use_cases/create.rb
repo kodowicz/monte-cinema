@@ -21,6 +21,8 @@ module Reservations
               screening: screening,
               tickets_params: tickets_params
             ).call
+
+            CancelReservationsJob.set(wait_until: expires_at).perform_later(reservation.id) if ticket_desk.online
           end
         end
       end
