@@ -12,7 +12,8 @@ module Tickets
           id: ticket.id,
           seat: ticket.seat,
           price: ticket.price,
-          ticket_type: ticket.ticket_type
+          ticket_type: ticket.ticket_type,
+          hall: ticket.cinema_hall.name
         }
       end
     end

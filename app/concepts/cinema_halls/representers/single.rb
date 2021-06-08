@@ -20,10 +20,7 @@ module CinemaHalls
 
       def extended
         {
-          id: cinema_hall.id,
-          name: cinema_hall.name,
-          capacity: cinema_hall.capacity,
-          seats: seats,
+          **basic,
           screenings: screenings
         }
       end
