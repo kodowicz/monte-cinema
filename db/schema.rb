@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_04_115323) do
+ActiveRecord::Schema.define(version: 2021_06_09_182536) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,11 +78,7 @@ ActiveRecord::Schema.define(version: 2021_06_04_115323) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "reservation_id", null: false
-    t.bigint "movie_id", null: false
-    t.bigint "cinema_hall_id", null: false
     t.integer "ticket_type", default: 0, null: false
-    t.index ["cinema_hall_id"], name: "index_tickets_on_cinema_hall_id"
-    t.index ["movie_id"], name: "index_tickets_on_movie_id"
     t.index ["reservation_id"], name: "index_tickets_on_reservation_id"
   end
 
@@ -91,7 +87,5 @@ ActiveRecord::Schema.define(version: 2021_06_04_115323) do
   add_foreign_key "reservations", "ticket_desks"
   add_foreign_key "screenings", "cinema_halls"
   add_foreign_key "screenings", "movies"
-  add_foreign_key "tickets", "cinema_halls"
-  add_foreign_key "tickets", "movies"
   add_foreign_key "tickets", "reservations"
 end

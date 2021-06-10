@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Movie.destroy_all
 CinemaHall.destroy_all
 Screening.destroy_all
@@ -50,36 +52,36 @@ movie_5 = Movie.create(id: 5, title: 'Ironman 3', genre: 'science fiction', age_
 
 screening_1 = Screening.create(
   id: 1,
-  starts_at: DateTime.parse('07/06/2021 17:00'),
-  ends_at: DateTime.parse('07/06/2021 19:40'),
+  starts_at: Time.current + 4.hours,
+  ends_at: Time.current + 6.hours + 40.minutes,
   cinema_hall_id: cinema_hall_1.id,
   movie_id: movie_1.id
 )
 screening_2 = Screening.create(
   id: 2,
-  starts_at: DateTime.parse('07/06/2021 13:00'),
-  ends_at: DateTime.parse('07/06/2021 15:40'),
+  starts_at: Time.current + 10.hours,
+  ends_at: Time.current + 12.hours + 40.minutes,
   cinema_hall_id: cinema_hall_2.id,
   movie_id: movie_1.id
 )
 screening_3 = Screening.create(
   id: 3,
-  starts_at: DateTime.parse('07/06/2021 19:30'),
-  ends_at: DateTime.parse('07/06/2021 22:10'),
+  starts_at: Time.current + 2.day,
+  ends_at: Time.current + 2.day + 62.hours + 40.minutes,
   cinema_hall_id: cinema_hall_2.id,
   movie_id: movie_2.id
 )
 screening_4 = Screening.create(
   id: 4,
-  starts_at: DateTime.parse('07/06/2021 11:00'),
-  ends_at: DateTime.parse('07/06/2021 14:10'),
+  starts_at: Time.current + 2.hours,
+  ends_at: Time.current + 3.hours + 40.minutes,
   cinema_hall_id: cinema_hall_4.id,
   movie_id: movie_5.id
 )
 screening_5 = Screening.create(
   id: 5,
-  starts_at: DateTime.parse('07/06/2021 17:40'),
-  ends_at: DateTime.parse('07/06/2021 20:50'),
+  starts_at: Time.current + 5.hours,
+  ends_at: Time.current + 8.hours + 10.minutes,
   cinema_hall_id: cinema_hall_4.id,
   movie_id: movie_5.id
 )
@@ -89,62 +91,69 @@ client_2 = Client.create(id: 2, email: 'emily@gmail.com', name: 'Emily', age: 25
 client_3 = Client.create(id: 3, email: 'john@gmail.com', name: 'John', age: 15, real_user: true)
 client_4 = Client.create(id: 4, email: 'david@gmail.com', name: 'David', age: 37, real_user: true)
 
-ticket_desk_1 = TicketDesk.create(id: 1, online: false)
-ticket_desk_2 = TicketDesk.create(id: 2, online: true)
+ticket_desk_1 = TicketDesk.create(id: 1, online: true)
+ticket_desk_2 = TicketDesk.create(id: 2, online: false)
+ticket_desk_3 = TicketDesk.create(id: 3, online: false)
 
-reservation_1 = Reservations::UseCases::Create.new(
+Reservations::UseCases::CreateOffline.new(
   params: {
-    client_id: client_1.id,
+    ticket_desk_id: ticket_desk_2.id,
     screening_id: screening_1.id,
     tickets: [
-      { price: 25,  ticket_type: "normal", seat: "A1" },
-      { price: 25,  ticket_type: "normal", seat: "A2" },
-      { price: 25,  ticket_type: "normal", seat: "A3" },
-      { price: 15,  ticket_type: "child", seat: "B1" },
-      { price: 15,  ticket_type: "child", seat: "B1" }
+      { price: 25,  ticket_type: 'normal', seat: 'A1' },
+      { price: 25,  ticket_type: 'normal', seat: 'A2' },
+      { price: 25,  ticket_type: 'normal', seat: 'A3' },
+      { price: 15,  ticket_type: 'child', seat: 'B1' },
+      { price: 15,  ticket_type: 'child', seat: 'B1' }
     ]
-  },
-  ticket_desk_id: ticket_desk_1.id
+  }
 ).call
 
-reservation_2 = Reservations::UseCases::Create.new(
+Reservations::UseCases::CreateOffline.new(
   params: {
-    client_id: client_1.id,
+    ticket_desk_id: ticket_desk_3.id,
     screening_id: screening_1.id,
     tickets: [
-      { price: 25,  ticket_type: "normal", seat: "D1" },
-      { price: 25,  ticket_type: "normal", seat: "D2" },
-      { price: 25,  ticket_type: "normal", seat: "D3" },
-      { price: 15,  ticket_type: "child", seat: "D4" }
+      { price: 25,  ticket_type: 'normal', seat: 'D1' },
+      { price: 25,  ticket_type: 'normal', seat: 'D2' },
+      { price: 25,  ticket_type: 'normal', seat: 'D3' },
+      { price: 15,  ticket_type: 'child', seat: 'D4' }
     ]
-  },
-  ticket_desk_id: ticket_desk_1.id
+  }
 ).call
 
-reservation_3 = Reservations::UseCases::Create.new(
+Reservations::UseCases::CreateOffline.new(
   params: {
-    client_id: client_3.id,
-    screening_id: screening_1.id,
-    tickets: [
-      { price: 20,  ticket_type: "student", seat: "E1" },
-      { price: 20,  ticket_type: "student", seat: "E2" },
-      { price: 20,  ticket_type: "student", seat: "E3" }
-    ]
-  },
-  ticket_desk_id: ticket_desk_2.id
-).call
-
-reservation_4 = Reservations::UseCases::Create.new(
-  params: {
-    client_id: client_2.id,
+    ticket_desk_id: ticket_desk_3.id,
     screening_id: screening_2.id,
     tickets: [
-      { price: 25,  ticket_type: "normal", seat: "B1" },
-      { price: 25,  ticket_type: "normal", seat: "B2" },
-      { price: 25,  ticket_type: "normal", seat: "B3" },
-      { price: 15,  ticket_type: "child", seat: "B9" },
-      { price: 15,  ticket_type: "child", seat: "B10" }
+      { price: 15,  ticket_type: 'student', seat: 'D1' },
     ]
-  },
-  ticket_desk_id: ticket_desk_2.id
+  }
 ).call
+
+Reservations::UseCases::CreateOnline.new(
+  params: {
+    screening_id: screening_1.id,
+    client_id: client_3.id,
+    tickets: [
+      { price: 20,  ticket_type: 'student', seat: 'E1' },
+      { price: 20,  ticket_type: 'student', seat: 'E2' },
+      { price: 20,  ticket_type: 'student', seat: 'E3' }
+    ]
+  }
+).call.paid!
+
+Reservations::UseCases::CreateOnline.new(
+  params: {
+    screening_id: screening_2.id,
+    client_id: client_2.id,
+    tickets: [
+      { price: 25,  ticket_type: 'normal', seat: 'B1' },
+      { price: 25,  ticket_type: 'normal', seat: 'B2' },
+      { price: 25,  ticket_type: 'normal', seat: 'B3' },
+      { price: 15,  ticket_type: 'child', seat: 'B9' },
+      { price: 15,  ticket_type: 'child', seat: 'B10' }
+    ]
+  }
+).call.paid!
