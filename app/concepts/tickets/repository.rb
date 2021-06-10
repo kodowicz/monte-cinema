@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tickets
   class Repository < ::Base::BaseRepository
     attr_reader :adapter
@@ -8,6 +10,10 @@ module Tickets
 
     def fetch_where(filter:)
       adapter.where(filter)
+    end
+
+    def create!(params)
+      adapter.create!(params)
     end
   end
 end
