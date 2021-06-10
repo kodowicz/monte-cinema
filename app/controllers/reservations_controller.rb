@@ -24,7 +24,7 @@ class ReservationsController < ApplicationController
     reservation = Reservations::UseCases::CreateOnline.new(params: online_params).call
 
     render json: Reservations::Representers::Single.new(reservation).extended, status: :created
-  rescue Reservations::UseCases::CreateOnline::ReservationInvalidError => e
+  rescue Reservations::Repository::ReservationInvalidError => e
     render json: { error: e.message }.to_json, status: :unprocessable_entity
   rescue Tickets::UseCases::CreateForReservation::SeatsNotAvailableError => e
     render json: { error: e.message }.to_json, status: :unprocessable_entity
@@ -34,7 +34,7 @@ class ReservationsController < ApplicationController
     reservation = Reservations::UseCases::CreateOffline.new(params: offline_params).call
 
     render json: Reservations::Representers::Single.new(reservation).extended, status: :created
-  rescue Reservations::UseCases::CreateOffline::ReservationInvalidError => e
+  rescue Reservations::Repository::ReservationInvalidError => e
     render json: { error: e.message }.to_json, status: :unprocessable_entity
   rescue Tickets::UseCases::CreateForReservation::SeatsNotAvailableError => e
     render json: { error: e.message }.to_json, status: :unprocessable_entity

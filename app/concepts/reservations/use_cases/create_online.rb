@@ -3,8 +3,6 @@
 module Reservations
   module UseCases
     class CreateOnline
-      ReservationInvalidError = Class.new(StandardError)
-
       attr_reader :repository, :params
 
       def initialize(params:, repository: Reservations::Repository.new)
@@ -14,8 +12,7 @@ module Reservations
 
       def call
         Reservation.transaction do
-          repository.create(reservation_params).tap do |reservation|
-            raise ReservationInvalidError, "Couldn't create reservation" unless reservation.persisted?
+          repository.create!(reservation_params).tap do |reservation|
 
             Tickets::UseCases::CreateForReservation.new(
               tickets_params: params[:tickets],
@@ -49,7 +46,7 @@ module Reservations
       end
 
       def expires_at
-        screening.starts_at - 30.minute
+        screening.starts_at - 30.minutes
       end
     end
   end
