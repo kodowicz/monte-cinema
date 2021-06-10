@@ -1,68 +1,36 @@
 # frozen_string_literal: true
 
 class TicketsController < ApplicationController
-  before_action :set_ticket, only: %i[show update destroy]
-
-  # GET /tickets
   def index
-    @tickets = TicketDesk.find(params[:ticket_desk_id]).reservations.find(params[:reservation_id]).tickets
-    # @tickets = Ticket.all.map do |res|
-    #   render_ticket(res)
-    # end
-    render json: @tickets
+    tickets = Tickets::Repository.new.fetch_where(
+      filter: {
+        reservation_id: params[:reservation_id]
+      }
+    )
+
+    render json: Tickets::Representers::All.new(tickets).basic, status: :ok
   end
 
-  # GET /tickets/:ticket_id
   def show
-    render json: render_ticket(@ticket)
+    ticket = Tickets::Repository.new.find(params[:id])
+
+    render json: Tickets::Representers::Single.new(ticket).basic, status: :ok
   end
 
-  # POST /tickets/
-  def create
-    @ticket = Ticket.create(ticket_params)
-
-    if @ticket.save
-      render json: @ticket, status: :created
-    else
-      render json: @ticket.errors, status: :unprocessable_entity
-    end
-  end
-
-  # PUT /tickets/:ticket_id
-  def update
-    if @ticket.update!(ticket_params)
-      render json: @ticket, status: :ok
-    else
-      render json: @ticket.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /tickets/:ticket_id
   def destroy
-    if @ticket.destroy!
-      render json: @ticket, status: :ok
-    else
-      render json: @ticket.errors, status: :unprocessable_entity
-    end
+    Tickets::Repository.new.delete(params[:id])
   end
 
   private
 
-  def render_ticket(ticket)
-    {
-      id: ticket.id,
-      movie_title: ticket.movie_title,
-      seat: ticket.seat,
-      type: ticket.type,
-      price: ticket.price
-    }
-  end
-
-  def set_ticket
-    @ticket = Ticket.find(params[:id])
-  end
-
-  def ticket_params
-    params.require(:ticket).permit(:movie_title, :seat, :type, :price)
+  def permit_params
+    params.require(:ticket).permit(
+      :seat,
+      :ticket_type,
+      :price,
+      :reservation_id,
+      :movie_id,
+      :cinema_hall_id
+    )
   end
 end

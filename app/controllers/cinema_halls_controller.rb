@@ -1,69 +1,59 @@
-# frozen_string_literal: true
-
 class CinemaHallsController < ApplicationController
-  # GET /cinema_halls
   def index
-    cinema_halls = CinemaHall.all.map do |hall|
-      render_cinema_hall(hall)
+    cinema_halls = CinemaHalls::Repository.new.find_all
+
+    if permit_params[:extended]
+      render json: CinemaHalls::Representers::All.new(cinema_halls).extended
+    else
+      render json: CinemaHalls::Representers::All.new(cinema_halls).basic
     end
-    render json: cinema_halls
   end
 
-  # GET /cinema_halls/:id
   def show
-    @cinema_hall = set_cinema_hall
+    cinema_hall = CinemaHalls::Repository.new.find(params[:id])
 
-    render json: render_cinema_hall(@cinema_hall)
+    if permit_params[:extended]
+      render json: CinemaHalls::Representers::Single.new(cinema_hall).extended
+    else
+      render json: CinemaHalls::Representers::Single.new(cinema_hall).basic
+    end
   end
 
-  # POST /cinema_halls/
   def create
-    cinema_call = CinemaHall.create(cinema_hall_params)
+    cinema_hall = CinemaHalls::UseCases::Create.new.call(params: permit_params)
 
     if cinema_hall.valid?
-      render json: render_cinema_hall(cinema_hall), status: :created
+      render json: CinemaHalls::Representers::Single.new(cinema_hall).basic, status: :created
     else
       render json: cinema_hall.errors, status: :unprocessable_entity
     end
   end
 
-  # PUT /cinema_halls/:id
   def update
-    @cinema_hall = set_cinema_hall
+    cinema_hall = CinemaHalls::UseCases::Update.new.call(id: params[:id], params: permit_params)
 
-    if @cinema_hall.update(cinema_hall_params)
-      render json: render_cinema_hall(@cinema_hall), status: :ok
+    if cinema_hall.valid?
+      render json: CinemaHalls::Representers::Single.new(cinema_hall).basic
     else
-      render json: @cinema_hall.errors, status: :unprocessable_entity
+      render json: cinema_hall.errors, status: :unprocessable_entity
     end
   end
 
-  # DELETE /cinema_halls/:id
   def destroy
-    @cinema_hall = set_cinema_hall
-
-    if @cinema_hall.destroy
-      render json: render_cinema_hall(@cinema_hall), status: :ok
-    else
-      render json: @cinema_hall.errors, status: :unprocessable_entity
-    end
+    CinemaHalls::UseCases::Delete.new.call(id: params[:id])
   end
 
   private
 
-  def render_cinema_hall(cinema_hall)
-    {
-      id: cinema_hall.id,
-      name: cinema_hall.name,
-      capacity: cinema_hall.capacity
-    }
-  end
-
-  def set_cinema_hall
-    @cinema_hall = CinemaHall.find(params[:id])
-  end
-
-  def cinema_hall_params
-    params.require(:cinema_hall).permit(:capacity, :name)
+  def permit_params
+    params.require(:cinema_hall).permit(
+      :name,
+      :capacity,
+      :extended,
+      rows: [],
+      columns: [],
+      not_available: [],
+      seats: []
+    )
   end
 end
