@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tickets
   module UseCases
     class CreateForReservation
@@ -13,12 +15,12 @@ module Tickets
 
       def call
         Ticket.transaction do
-          raise SeatsNotAvailableError, "Every seats are taken" if available_seats.empty?
-          raise SeatsNotAvailableError, "Provided seat are not available" unless available?
+          raise SeatsNotAvailableError, 'Every seats are taken' if available_seats.empty?
+          raise SeatsNotAvailableError, 'Provided seat are not available' unless available?
 
           tickets_params.each do |params|
             ticket = reservation.tickets.create(params)
-            raise SeatsNotAvailableError, "Provided parameters are invalid" unless ticket.persisted?
+            raise SeatsNotAvailableError, 'Provided parameters are invalid' unless ticket.persisted?
           end
         end
       end

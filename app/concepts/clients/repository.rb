@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Clients
   class Repository < ::Base::BaseRepository
     attr_reader :adapter
@@ -6,7 +8,7 @@ module Clients
       super(adapter: adapter)
     end
 
-    def fake_client
+    def offline_client
       adapter.where(real_user: false).first
     end
   end
