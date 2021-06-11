@@ -71,6 +71,8 @@ GEM
     erubi (1.10.0)
     et-orbi (1.2.4)
       tzinfo
+    faker (2.18.0)
+      i18n (>= 1.6, < 2)
     ffi (1.15.0)
     fugit (1.4.5)
       et-orbi (~> 1.1, >= 1.1.8)
@@ -185,6 +187,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
+  faker (~> 2.18)
   listen (~> 3.3)
   pg (~> 1.1)
   puma (~> 5.0)
