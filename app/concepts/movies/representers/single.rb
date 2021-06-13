@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Movies
   module Representers
     class Single
@@ -11,15 +13,19 @@ module Movies
         {
           id: movie.id,
           title: movie.title,
-          genre: movie.genre,
+          genre: movie.genre.name,
           duration: movie.duration,
-          age_restriction: movie.age_restriction
+          age_restriction: movie.age_restriction,
+          poster: movie.poster
         }
       end
 
       def extended
         {
           **basic,
+          trailer: movie.trailer,
+          production: movie.production,
+          description: movie.description,
           screenings: screenings
         }
       end

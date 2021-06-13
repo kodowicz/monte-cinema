@@ -16,7 +16,11 @@ Rails.application.routes.draw do
   end
 
   resources :movies, only: %i[index show] do
-    resources :screenings, only: %i[index]
+    collection do
+      get '/popular', to: 'movies#popular'
+    end
+
+    resources :screenings, only: %i[index show]
   end
 
   resources :clients, only: %i[show create update destroy] do
