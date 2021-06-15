@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class TicketsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     tickets = Tickets::Repository.new.fetch_where(
       filter: {

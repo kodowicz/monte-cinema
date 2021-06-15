@@ -1,4 +1,6 @@
 class CinemaHallsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     cinema_halls = CinemaHalls::Repository.new.find_all
 
