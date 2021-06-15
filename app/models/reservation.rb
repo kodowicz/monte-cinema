@@ -4,11 +4,11 @@ class Reservation < ApplicationRecord
   has_many :tickets, dependent: :delete_all
   belongs_to :ticket_desk
   belongs_to :screening
-  belongs_to :client
+  belongs_to :user
 
   validates :status, presence: true
   validates :expires_at, presence: true
   validates :ticket_desk_id, presence: true
   validates :screening_id, presence: true
-  validates :client_id, presence: true
+  validates :user_id, presence: true
 end

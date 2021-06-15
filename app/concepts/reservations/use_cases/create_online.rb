@@ -30,7 +30,7 @@ module Reservations
       def reservation_params
         {
           screening_id: params[:screening_id],
-          client_id: params[:client_id],
+          user_id: params[:user_id],
           ticket_desk_id: ticket_desk_online,
           expires_at: expires_at,
           status: 'created'

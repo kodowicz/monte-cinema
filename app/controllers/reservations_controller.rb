@@ -54,7 +54,7 @@ class ReservationsController < ApplicationController
 
   def online_params
     params.require(:reservation).permit(
-      :client_id,
+      :user_id,
       :screening_id,
       tickets: %i[price ticket_type seat]
     )

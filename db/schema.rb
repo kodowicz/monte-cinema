@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_15_191709) do
+ActiveRecord::Schema.define(version: 2021_06_15_210551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,15 +22,6 @@ ActiveRecord::Schema.define(version: 2021_06_15_191709) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "seats", default: [], array: true
     t.text "not_available", default: [], array: true
-  end
-
-  create_table "clients", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.integer "age"
-    t.boolean "real_user"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "display_types", force: :cascade do |t|
@@ -72,13 +63,13 @@ ActiveRecord::Schema.define(version: 2021_06_15_191709) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ticket_desk_id", null: false
-    t.bigint "client_id", null: false
     t.bigint "screening_id", null: false
     t.datetime "expires_at", null: false
     t.integer "status", default: 0, null: false
-    t.index ["client_id"], name: "index_reservations_on_client_id"
+    t.bigint "user_id", null: false
     t.index ["screening_id"], name: "index_reservations_on_screening_id"
     t.index ["ticket_desk_id"], name: "index_reservations_on_ticket_desk_id"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
   end
 
   create_table "screenings", force: :cascade do |t|
@@ -136,9 +127,9 @@ ActiveRecord::Schema.define(version: 2021_06_15_191709) do
   end
 
   add_foreign_key "movies", "genres"
-  add_foreign_key "reservations", "clients"
   add_foreign_key "reservations", "screenings"
   add_foreign_key "reservations", "ticket_desks"
+  add_foreign_key "reservations", "users"
   add_foreign_key "screenings", "cinema_halls"
   add_foreign_key "screenings", "display_types"
   add_foreign_key "screenings", "movies"
