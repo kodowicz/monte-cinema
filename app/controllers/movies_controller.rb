@@ -2,15 +2,15 @@
 
 class MoviesController < ApplicationController
   def index
-      movies = Movies::Repository.new.find_by(
-        filter: 'title LIKE ?',
-        params: "%#{search_params[:input]}%"
-      )
-      movies << Movies::Repository.new.find_by(
-        filter: 'description LIKE ?',
-        params: "%#{search_params[:input]}%"
-      )
-    end
+    movies = Movies::Repository.new.find_order(order: movies_params[:order])
+
+    render json: Movies::Representers::Pagination.new(
+      movies: movies,
+      pagination: params[:pagination]
+    ).basic
+  rescue Movies::Repository::InvalidParamsError => e
+    render json: { error: e.message }.to_json, status: :unprocessable_entity
+  end
 
   def popular
     movies = Movies::Repository.new.find_popular(limit: popular_params[:limit])
@@ -29,8 +29,8 @@ class MoviesController < ApplicationController
 
   private
 
-  def permit_params
-    params.require(:movie).permit(:title, :genre)
+  def movies_params
+    params.require(:movie).permit(:order, pagination: %i[page items])
   end
 
   def popular_params
