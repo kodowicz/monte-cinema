@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_12_205148) do
+ActiveRecord::Schema.define(version: 2021_06_15_210551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,11 +24,14 @@ ActiveRecord::Schema.define(version: 2021_06_12_205148) do
     t.text "not_available", default: [], array: true
   end
 
-  create_table "clients", force: :cascade do |t|
+  create_table "display_types", force: :cascade do |t|
+    t.string "name", default: "2D"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "genres", force: :cascade do |t|
     t.string "name"
-    t.string "email"
-    t.integer "age"
-    t.boolean "real_user"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -43,6 +46,11 @@ ActiveRecord::Schema.define(version: 2021_06_12_205148) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+
+  create_table "jwt_denylist", force: :cascade do |t|
+    t.string "jti", null: false
+    t.datetime "exp", null: false
+    t.index ["jti"], name: "index_jwt_denylist_on_jti"
   end
 
   create_table "movies", force: :cascade do |t|
@@ -66,13 +74,13 @@ ActiveRecord::Schema.define(version: 2021_06_12_205148) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ticket_desk_id", null: false
-    t.bigint "client_id", null: false
     t.bigint "screening_id", null: false
     t.datetime "expires_at", null: false
     t.integer "status", default: 0, null: false
-    t.index ["client_id"], name: "index_reservations_on_client_id"
+    t.bigint "user_id", null: false
     t.index ["screening_id"], name: "index_reservations_on_screening_id"
     t.index ["ticket_desk_id"], name: "index_reservations_on_ticket_desk_id"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
   end
 
   create_table "screenings", force: :cascade do |t|
@@ -106,6 +114,23 @@ ActiveRecord::Schema.define(version: 2021_06_12_205148) do
     t.index ["reservation_id"], name: "index_tickets_on_reservation_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "username", default: ""
+    t.integer "age", default: 0, null: false
+    t.text "avatar", default: ""
+    t.boolean "real_user", default: true, null: false
+    t.integer "role", default: 0, null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
   create_table "voice_types", force: :cascade do |t|
     t.string "name", default: "original"
     t.datetime "created_at", precision: 6, null: false
@@ -113,9 +138,9 @@ ActiveRecord::Schema.define(version: 2021_06_12_205148) do
   end
 
   add_foreign_key "movies", "genres"
-  add_foreign_key "reservations", "clients"
   add_foreign_key "reservations", "screenings"
   add_foreign_key "reservations", "ticket_desks"
+  add_foreign_key "reservations", "users"
   add_foreign_key "screenings", "cinema_halls"
   add_foreign_key "screenings", "display_types"
   add_foreign_key "screenings", "movies"

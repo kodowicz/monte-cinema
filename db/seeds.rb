@@ -3,7 +3,7 @@
 Movie.destroy_all
 CinemaHall.destroy_all
 Screening.destroy_all
-Client.destroy_all
+User.destroy_all
 TicketDesk.destroy_all
 Reservation.destroy_all
 Ticket.destroy_all
@@ -71,14 +71,14 @@ cinema_halls = [
   )
 ]
 
-Client.create(id: 1, email: 'montecinema@gmail.com', name: 'Monterail', age: 18, real_user: false)
-clients = (2..10).map do |id|
-  Client.create(
-    id: id,
-    name: Faker::Name.name,
+User.create(email: 'cinema@monterail.com', username: 'Monterail', age: 18, real_user: false, role: 'admin')
+users = (2..10).map do
+  User.create(
+    username: Faker::Name.name,
     email: Faker::Internet.email,
     age: rand(10..50),
-    real_user: true
+    real_user: true,
+    role: 'client'
   )
 end
 
@@ -131,7 +131,7 @@ Reservations::UseCases::CreateOffline.new(
       { price: 25,  ticket_type: 'normal', seat: 'A2' },
       { price: 25,  ticket_type: 'normal', seat: 'A3' },
       { price: 15,  ticket_type: 'child', seat: 'B1' },
-      { price: 15,  ticket_type: 'child', seat: 'B1' }
+      { price: 15,  ticket_type: 'child', seat: 'B2' }
     ]
   }
 ).call
@@ -162,7 +162,7 @@ Reservations::UseCases::CreateOffline.new(
 Reservations::UseCases::CreateOnline.new(
   params: {
     screening_id: screenings[0].id,
-    client_id: clients.sample[:id],
+    user_id: users.sample[:id],
     tickets: [
       { price: 20,  ticket_type: 'student', seat: 'E1' },
       { price: 20,  ticket_type: 'student', seat: 'E2' },
@@ -174,7 +174,7 @@ Reservations::UseCases::CreateOnline.new(
 Reservations::UseCases::CreateOnline.new(
   params: {
     screening_id: screenings[1].id,
-    client_id: clients.sample[:id],
+    user_id: users.sample[:id],
     tickets: [
       { price: 25,  ticket_type: 'normal', seat: 'B1' },
       { price: 25,  ticket_type: 'normal', seat: 'B2' },
