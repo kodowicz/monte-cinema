@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ReservationsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     reservations = Reservations::Repository.new.find_filtred(
       filter: {
@@ -52,7 +54,7 @@ class ReservationsController < ApplicationController
 
   def online_params
     params.require(:reservation).permit(
-      :client_id,
+      :user_id,
       :screening_id,
       tickets: %i[price ticket_type seat]
     )

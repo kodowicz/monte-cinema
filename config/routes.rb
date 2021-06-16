@@ -16,10 +16,25 @@ Rails.application.routes.draw do
   end
 
   resources :movies, only: %i[index show] do
-    resources :screenings, only: %i[index]
+    collection do
+      get '/popular', to: 'movies#popular'
+    end
+
+    resources :screenings, only: %i[index show]
   end
 
-  resources :clients, only: %i[show create update destroy] do
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations'
+  }
+
+  devise_scope :user do
+    post 'signup', to: 'users/registrations#create'
+    post 'login', to: 'users/sessions#create'
+    delete 'logout', to: 'users/sessions#destroy'
+  end
+
+  resources :users do
     resources :reservations, only: %i[index show create destroy] do
       resources :tickets, only: %i[index show destroy]
     end

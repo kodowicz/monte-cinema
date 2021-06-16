@@ -28,7 +28,7 @@ module Reservations
         {
           ticket_desk_id: params[:ticket_desk_id],
           screening_id: params[:screening_id],
-          client_id: offline_client.id,
+          user_id: offline_user.id,
           expires_at: expires_at,
           status: 'paid'
         }
@@ -38,8 +38,8 @@ module Reservations
         @screening ||= Screenings::Repository.new.find(params[:screening_id])
       end
 
-      def offline_client
-        @offline_client ||= Clients::Repository.new.offline_client
+      def offline_user
+        @offline_user ||= Users::Repository.new.offline_user
       end
 
       def expires_at
