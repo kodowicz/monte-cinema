@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CinemaHallsController < ApplicationController
   before_action :authenticate_user!
 

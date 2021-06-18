@@ -2,15 +2,15 @@
 
 class MoviesController < ApplicationController
   def index
-      movies = Movies::Repository.new.find_by(
-        filter: 'title LIKE ?',
-        params: "%#{search_params[:input]}%"
-      )
-      movies << Movies::Repository.new.find_by(
-        filter: 'description LIKE ?',
-        params: "%#{search_params[:input]}%"
-      )
-    end
+    movies = Movies::Repository.new.find_by(
+      filter: 'title LIKE ?',
+      params: "%#{search_params[:input]}%"
+    )
+    movies << Movies::Repository.new.find_by(
+      filter: 'description LIKE ?',
+      params: "%#{search_params[:input]}%"
+    )
+  end
 
   def popular
     movies = Movies::Repository.new.find_popular(limit: popular_params[:limit])

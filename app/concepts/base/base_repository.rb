@@ -1,27 +1,31 @@
-class Base::BaseRepository
-  attr_reader :adapter
+# frozen_string_literal: true
 
-  def initialize(adapter:)
-    @adapter = adapter
-  end
+module Base
+  class BaseRepository
+    attr_reader :adapter
 
-  def find_all
-    adapter.order(:id).all
-  end
+    def initialize(adapter:)
+      @adapter = adapter
+    end
 
-  def find(id)
-    adapter.find(id)
-  end
+    def find_all
+      adapter.order(:id).all
+    end
 
-  def create(params)
-    adapter.create(params)
-  end
+    def find(id)
+      adapter.find(id)
+    end
 
-  def update(id, params)
-    adapter.update(id, params)
-  end
+    def create(params)
+      adapter.create(params)
+    end
 
-  def delete(id)
-    adapter.destroy(id)
+    def update(id, params)
+      adapter.update(id, params)
+    end
+
+    def delete(id)
+      adapter.destroy(id)
+    end
   end
 end

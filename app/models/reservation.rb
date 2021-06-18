@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Reservation < ApplicationRecord
   enum status: { pending: 0, created: 1, paid: 2, canceled: 3 }
 

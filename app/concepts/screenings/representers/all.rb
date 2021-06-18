@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Screenings
   module Representers
     class All

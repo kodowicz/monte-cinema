@@ -13,7 +13,6 @@ module Reservations
       def call
         Reservation.transaction do
           repository.create!(reservation_params).tap do |reservation|
-
             Tickets::UseCases::CreateForReservation.new(
               tickets_params: params[:tickets],
               reservation: reservation,
