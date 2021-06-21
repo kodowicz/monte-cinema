@@ -7,9 +7,9 @@ class CinemaHallsController < ApplicationController
     cinema_halls = CinemaHalls::UseCases::FindAll.new.call(user: current_user)
 
     if permit_params[:extended]
-      render json: CinemaHalls::Representers::All.new(cinema_halls).extended
+      render json: { halls: CinemaHalls::Representers::All.new(cinema_halls).extended }
     else
-      render json: CinemaHalls::Representers::All.new(cinema_halls).basic
+      render json: { halls: CinemaHalls::Representers::All.new(cinema_halls).basic }
     end
   end
 
@@ -17,9 +17,9 @@ class CinemaHallsController < ApplicationController
     cinema_hall = CinemaHalls::UseCases::Find.new.call(id: params[:id], user: current_user)
 
     if permit_params[:extended]
-      render json: CinemaHalls::Representers::Single.new(cinema_hall).extended
+      render json: { hall: CinemaHalls::Representers::Single.new(cinema_hall).extended }
     else
-      render json: CinemaHalls::Representers::Single.new(cinema_hall).basic
+      render json: { hall: CinemaHalls::Representers::Single.new(cinema_hall).basic }
     end
   end
 
@@ -27,9 +27,9 @@ class CinemaHallsController < ApplicationController
     cinema_hall = CinemaHalls::UseCases::Create.new.call(params: permit_params, user: current_user)
 
     if cinema_hall.valid?
-      render json: CinemaHalls::Representers::Single.new(cinema_hall).basic, status: :created
+      render json: { hall: CinemaHalls::Representers::Single.new(cinema_hall).basic }, status: :created
     else
-      render json: cinema_hall.errors, status: :unprocessable_entity
+      render json: { error: cinema_hall.errors }.to_json, status: :unprocessable_entity
     end
   end
 
@@ -41,9 +41,9 @@ class CinemaHallsController < ApplicationController
     )
 
     if cinema_hall.valid?
-      render json: CinemaHalls::Representers::Single.new(cinema_hall).basic
+      render json: { hall: CinemaHalls::Representers::Single.new(cinema_hall).basic }
     else
-      render json: cinema_hall.errors, status: :unprocessable_entity
+      render json: { error: cinema_hall.errors }.to_json, status: :unprocessable_entity
     end
   end
 

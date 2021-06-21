@@ -3,6 +3,9 @@
 class ReservationsController < ApplicationController
   before_action :authenticate_user!
 
+  rescue_from Reservations::UseCases::Create::ReservationInvalidError, with: :invalid_request
+  rescue_from Tickets::UseCases::CreateForReservation::SeatsNotAvailableError, with: :invalid_request
+
   def index
     reservations = policy_scope(Reservations::Repository.new.find_all)
 
@@ -26,10 +29,6 @@ class ReservationsController < ApplicationController
     ).call
 
     render json: { reservation: Reservations::Representers::Single.new(reservation).extended }, status: :created
-  rescue Reservations::UseCases::Create::ReservationInvalidError => e
-    render json: { error: e.message }.to_json, status: :unprocessable_entity
-  rescue Tickets::UseCases::CreateForReservation::SeatsNotAvailableError => e
-    render json: { error: e.message }.to_json, status: :unprocessable_entity
   end
 
   def create_offline
@@ -39,10 +38,6 @@ class ReservationsController < ApplicationController
     ).call
 
     render json: { reservation: Reservations::Representers::Single.new(reservation).extended }, status: :created
-  rescue Reservations::UseCases::Create::ReservationInvalidError => e
-    render json: { error: e.message }.to_json, status: :unprocessable_entity
-  rescue Tickets::UseCases::CreateForReservation::SeatsNotAvailableError => e
-    render json: { error: e.message }.to_json, status: :unprocessable_entity
   end
 
   def update
@@ -63,6 +58,10 @@ class ReservationsController < ApplicationController
   end
 
   private
+
+  def invalid_request(error)
+    render json: { error: error.message }.to_json, status: :unprocessable_entity
+  end
 
   def show_params
     params.require(:reservation).permit(:extended)

@@ -3,7 +3,7 @@
 class ScreeningsController < ApplicationController
   def show
     screening = Screenings::Repository.new.find(params[:id])
-    render json: Screenings::Representers::Single.new(screening).extended
+    render json: { screening: Screenings::Representers::Single.new(screening).extended }
   end
 
   private

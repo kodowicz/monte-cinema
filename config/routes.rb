@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :movies, only: %i[index show] do
     collection do
       get '/popular', to: 'movies#popular'
+      get '/search', to: 'movies#search'
     end
 
     resources :screenings, only: %i[index show]

@@ -51,3 +51,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'sidekiq', '~> 6.2'
 gem 'sidekiq-cron', '~> 1.2'
+
+gem 'pagy', '~> 3.5'
