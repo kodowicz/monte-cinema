@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module CinemaHalls
+module Tickets
   module UseCases
     class Delete
       attr_reader :repository
@@ -10,8 +10,8 @@ module CinemaHalls
       end
 
       def call(id:, user:)
-        cinema_hall = repository.new.find(id)
-        raise Pundit::NotAuthorizedError unless CinemaHallPolicy.new(user, cinema_hall).destroy?
+        ticket = repository.new.find(id)
+        raise Pundit::NotAuthorizedError unless TicketPolicy.new(user, ticket).destroy?
 
         repository.delete(id)
       end

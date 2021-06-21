@@ -4,8 +4,10 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
+  resources :cinema_halls, only: %i[index show create update destroy]
+
   resources :ticket_desks, only: %i[show] do
-    resources :reservations, only: %i[index show create destroy] do
+    resources :reservations, only: %i[index show create update destroy] do
       collection do
         post '/online', to: 'reservations#create_online'
         post '/offline', to: 'reservations#create_offline'
@@ -35,7 +37,7 @@ Rails.application.routes.draw do
   end
 
   resources :users do
-    resources :reservations, only: %i[index show create destroy] do
+    resources :reservations, only: %i[index show destroy] do
       resources :tickets, only: %i[index show destroy]
     end
   end

@@ -3,13 +3,15 @@
 module CinemaHalls
   module UseCases
     class Create
-      attr_reader :repository
+      attr_reader :repository, :user
 
-      def initialize(repository: CinemaHalls::Repository.new)
+      def initialize(repository: Repository.new)
         @repository = repository
       end
 
-      def call(params:)
+      def call(params:, user:)
+        raise Pundit::NotAuthorizedError unless CinemaHallPolicy.new(user, :cinema_hall).create?
+
         seats = GenerateSeats.new(params: params).call
         permit_params = CinemaHalls::Processors::ModifyParams.new(params: params, seats: seats).call
 

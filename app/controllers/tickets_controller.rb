@@ -4,35 +4,21 @@ class TicketsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    tickets = Tickets::Repository.new.fetch_where(
-      filter: {
-        reservation_id: params[:reservation_id]
-      }
+    tickets = Tickets::UseCases::FindFilter.new.call(
+      filter: { reservation_id: params[:reservation_id] },
+      user: current_user
     )
 
-    render json: Tickets::Representers::All.new(tickets).basic, status: :ok
+    render json: Tickets::Representers::All.new(tickets).basic
   end
 
   def show
-    ticket = Tickets::Repository.new.find(params[:id])
+    ticket = Tickets::UseCases::Find.new.call(id: params[:id], user: current_user)
 
-    render json: Tickets::Representers::Single.new(ticket).basic, status: :ok
+    render json: Tickets::Representers::Single.new(ticket).basic
   end
 
   def destroy
-    Tickets::Repository.new.delete(params[:id])
-  end
-
-  private
-
-  def permit_params
-    params.require(:ticket).permit(
-      :seat,
-      :ticket_type,
-      :price,
-      :reservation_id,
-      :movie_id,
-      :cinema_hall_id
-    )
+    Tickets::UseCases::Find.new.call.delete(id: params[:id], user: current_user)
   end
 end

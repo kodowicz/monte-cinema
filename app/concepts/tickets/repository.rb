@@ -8,7 +8,7 @@ module Tickets
       super(adapter: adapter)
     end
 
-    def fetch_where(filter:)
+    def find_filter(filter)
       adapter.where(filter)
     end
 
