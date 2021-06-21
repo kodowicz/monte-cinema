@@ -3,17 +3,19 @@
 module Reservations
   module UseCases
     class CreateOnline
-      attr_reader :repository, :params
+      attr_reader :repository, :user, :params
 
-      def initialize(params:, repository: Reservations::Repository.new)
+      def initialize(user:, params:, repository: Reservations::Repository.new)
         @repository = repository
         @params = params
+        @user = user
       end
 
       def call
-        Reservation.transaction do
-          repository.create!(reservation_params).tap do |reservation|
+        raise Pundit::NotAuthorizedError unless ReservationPolicy.new(user, :reservation).create_online?
 
+        Reservation.transaction do
+          Create.new(params: reservation_params).call!.tap do |reservation|
             Tickets::UseCases::CreateForReservation.new(
               tickets_params: params[:tickets],
               reservation: reservation,
@@ -30,7 +32,7 @@ module Reservations
       def reservation_params
         {
           screening_id: params[:screening_id],
-          user_id: params[:user_id],
+          user_id: user.id,
           ticket_desk_id: ticket_desk_online,
           expires_at: expires_at,
           status: 'created'

@@ -12,6 +12,12 @@ genre = %w[action horror romance drama comedy science-fiction thriller musical d
 display_type = %w[2D 3D IMAX SCREENX]
 voice_type = %w[original dubbing subtitles]
 
+def english_description
+  (1..rand(5..10)).map do
+    "#{Faker::Book.title}. "
+  end.join
+end
+
 genres = genre.map.with_index do |name, id|
   Genre.create(
     id: id + 1,
@@ -71,11 +77,41 @@ cinema_halls = [
   )
 ]
 
-User.create(email: 'cinema@monterail.com', username: 'Monterail', age: 18, real_user: false, role: 'admin')
-users = (2..10).map do
+User.create(
+  email: 'cinema@monterail.com', 
+  first_name: Faker::Name.first_name, 
+  last_name: Faker::Name.last_name,
+  phone_number: Faker::PhoneNumber.cell_phone,
+  age: 18, 
+  real_user: false, 
+  role: 'employee'
+)
+User.create(
+  email: 'admin@monterail.com',
+  first_name: Faker::Name.first_name, 
+  last_name: Faker::Name.last_name,
+  phone_number: Faker::PhoneNumber.cell_phone,
+  age: 18,
+  real_user: true,
+  role: 'admin'
+)
+employees = (1..5).map do
   User.create(
-    username: Faker::Name.name,
     email: Faker::Internet.email,
+    first_name: Faker::Name.first_name, 
+    last_name: Faker::Name.last_name,
+    phone_number: Faker::PhoneNumber.cell_phone,
+    age: 18,
+    real_user: true,
+    role: 'employee'
+  )
+end
+users = (1..10).map do
+  User.create(
+    email: Faker::Internet.email,
+    first_name: Faker::Name.first_name, 
+    last_name: Faker::Name.last_name,
+    phone_number: Faker::PhoneNumber.cell_phone,
     age: rand(10..50),
     real_user: true,
     role: 'client'
@@ -96,13 +132,13 @@ movies = (1..20).map do |id|
     title: Faker::Book.title,
     direction: Faker::Name.name,
     production: "#{Faker::Address.country}, 2021",
-    description: Faker::Lorem.paragraph(sentence_count: 2),
+    description: english_description,
     poster: Faker::Avatar.image,
     trailer: Faker::Avatar.image,
     release_at: rand(Time.current - 7.days..Time.current + 7.days),
     age_restriction: rand(0..18),
     duration: rand(120..200),
-    ratio: rand(1..5),
+    ratio: rand(1..10),
     genre_id: genres.sample.id
   )
 end
@@ -160,9 +196,9 @@ Reservations::UseCases::CreateOffline.new(
 ).call
 
 Reservations::UseCases::CreateOnline.new(
+  user: users.sample,
   params: {
     screening_id: screenings[0].id,
-    user_id: users.sample[:id],
     tickets: [
       { price: 20,  ticket_type: 'student', seat: 'E1' },
       { price: 20,  ticket_type: 'student', seat: 'E2' },
@@ -172,9 +208,9 @@ Reservations::UseCases::CreateOnline.new(
 ).call.paid!
 
 Reservations::UseCases::CreateOnline.new(
+  user: users.sample,
   params: {
     screening_id: screenings[1].id,
-    user_id: users.sample[:id],
     tickets: [
       { price: 25,  ticket_type: 'normal', seat: 'B1' },
       { price: 25,  ticket_type: 'normal', seat: 'B2' },

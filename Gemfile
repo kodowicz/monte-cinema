@@ -18,6 +18,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'figaro', '~> 1.1', '>= 1.1.1'
 gem 'devise'
 gem 'devise-jwt'
+gem 'pundit', '~> 2.1'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

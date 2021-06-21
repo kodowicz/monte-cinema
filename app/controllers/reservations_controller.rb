@@ -4,46 +4,62 @@ class ReservationsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    reservations = Reservations::Repository.new.find_filtred(
-      filter: {
-        ticket_desk_id: params[:ticket_desk_id]
-      }
-    )
+    reservations = policy_scope(Reservations::Repository.new.find_all)
 
     if show_params[:extended]
-      render json: Reservations::Representers::All.new(reservations).extended
+      render json: { reservations: Reservations::Representers::All.new(reservations).extended }
     else
-      render json: Reservations::Representers::All.new(reservations).basic
+      render json: { reservations: Reservations::Representers::All.new(reservations).basic }
     end
   end
 
   def show
     reservation = Reservations::Repository.new.find(params[:id])
-    render json: Reservations::Representers::Single.new(reservation).extended
+    authorize reservation
+    render json: { reservation: Reservations::Representers::Single.new(reservation).extended }
   end
 
   def create_online
-    reservation = Reservations::UseCases::CreateOnline.new(params: online_params).call
+    reservation = Reservations::UseCases::CreateOnline.new(
+      user: current_user,
+      params: online_params
+    ).call
 
-    render json: Reservations::Representers::Single.new(reservation).extended, status: :created
-  rescue Reservations::Repository::ReservationInvalidError => e
+    render json: { reservation: Reservations::Representers::Single.new(reservation).extended }, status: :created
+  rescue Reservations::UseCases::Create::ReservationInvalidError => e
     render json: { error: e.message }.to_json, status: :unprocessable_entity
   rescue Tickets::UseCases::CreateForReservation::SeatsNotAvailableError => e
     render json: { error: e.message }.to_json, status: :unprocessable_entity
   end
 
   def create_offline
-    reservation = Reservations::UseCases::CreateOffline.new(params: offline_params).call
+    reservation = Reservations::UseCases::CreateOffline.new(
+      params: offline_params.merge({ ticket_desk_id: params[:ticket_desk_id] }),
+      user: current_user
+    ).call
 
-    render json: Reservations::Representers::Single.new(reservation).extended, status: :created
-  rescue Reservations::Repository::ReservationInvalidError => e
+    render json: { reservation: Reservations::Representers::Single.new(reservation).extended }, status: :created
+  rescue Reservations::UseCases::Create::ReservationInvalidError => e
     render json: { error: e.message }.to_json, status: :unprocessable_entity
   rescue Tickets::UseCases::CreateForReservation::SeatsNotAvailableError => e
     render json: { error: e.message }.to_json, status: :unprocessable_entity
   end
 
+  def update
+    reservation = Reservations::UseCases::Update.new.call(
+      params: update_params,
+      user: current_user,
+      id: params[:id]
+    )
+    render json: { reservation: Reservations::Representers::Single.new(reservation).basic }
+  end
+
   def destroy
-    Reservations::Repository.new.delete(params[:id])
+    Reservations::UseCases::Delete.new.call(
+      user: current_user,
+      id: params[:id]
+    )
+    render json: { message: 'Reservation canceled' }
   end
 
   private
@@ -54,7 +70,6 @@ class ReservationsController < ApplicationController
 
   def online_params
     params.require(:reservation).permit(
-      :user_id,
       :screening_id,
       tickets: %i[price ticket_type seat]
     )
@@ -64,10 +79,10 @@ class ReservationsController < ApplicationController
     params.require(:reservation).permit(
       :screening_id,
       tickets: %i[price ticket_type seat]
-    ).merge(
-      {
-        ticket_desk_id: params[:ticket_desk_id]
-      }
     )
+  end
+
+  def update_params
+    params.require(:reservation).permit(:status)
   end
 end

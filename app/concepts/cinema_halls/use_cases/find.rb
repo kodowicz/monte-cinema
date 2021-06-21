@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CinemaHalls
   module UseCases
     class Find
@@ -7,7 +9,9 @@ module CinemaHalls
         @repository = repository
       end
 
-      def call(id:)
+      def call(id:, user:)
+        raise Pundit::NotAuthorizedError unless CinemaHallPolicy.new(user, :cinema_hall).show?
+
         repository.find(id)
       end
     end

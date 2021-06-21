@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Reservations
   module Representers
     class Single
@@ -11,7 +13,7 @@ module Reservations
         {
           id: reservation.id,
           status: reservation.status,
-          expires_at: reservation.expires_at
+          expires_at: format_date
         }
       end
 
@@ -26,6 +28,10 @@ module Reservations
 
       def tickets
         @tickets ||= Tickets::Representers::All.new(reservation.tickets).basic
+      end
+
+      def format_date
+        reservation.expires_at.strftime("%I:%M %p, %d.%m.%Y")
       end
     end
   end

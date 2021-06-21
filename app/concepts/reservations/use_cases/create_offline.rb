@@ -3,16 +3,19 @@
 module Reservations
   module UseCases
     class CreateOffline
-      attr_reader :repository, :params
+      attr_reader :repository, :params, :user
 
-      def initialize(params:, repository: Reservations::Repository.new)
+      def initialize(params:, user:, repository: Reservations::Repository.new)
         @repository = repository
         @params = params
+        @user = user
       end
 
       def call
+        raise Pundit::NotAuthorizedError unless ReservationPolicy.new(user, :reservation).create_offline?
+
         Reservation.transaction do
-          repository.create!(reservation_params).tap do |reservation|
+          Create.new(params: reservation_params).call!.tap do |reservation|
             Tickets::UseCases::CreateForReservation.new(
               tickets_params: params[:tickets],
               reservation: reservation,
