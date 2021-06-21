@@ -12,7 +12,6 @@ class ReservationPolicy < ApplicationPolicy
   end
 
   def show?
-    byebug
     staff? || permit_user?
   end
 
