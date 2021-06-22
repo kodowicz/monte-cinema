@@ -2,7 +2,7 @@
 
 class TicketDesksController < ApplicationController
   def show
-    ticket_desk = TicketDesk.Repository.find(params[:id])
-    render json: { ticket_desk: ticket_desk }
+    ticket_desk = TicketDesks::Repository.new.find(params[:id])
+    render json: { ticket_desk: TicketDesks::Representer.new(ticket_desk).basic }
   end
 end

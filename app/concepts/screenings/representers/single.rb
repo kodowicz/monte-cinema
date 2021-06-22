@@ -12,7 +12,7 @@ module Screenings
       def basic
         {
           id: screening.id,
-          starts_at: screening.starts_at,
+          starts_at: format_date,
           cinema_hall_id: screening.cinema_hall_id,
           movie_id: screening.movie_id
         }
@@ -29,6 +29,10 @@ module Screenings
 
       def seats
         Screenings::UseCases::RenderSeats.new(screening: screening).call
+      end
+
+      def format_date
+        screening.starts_at.strftime("%I:%M %p, %d.%m.%Y")
       end
     end
   end
