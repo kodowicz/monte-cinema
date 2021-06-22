@@ -26,7 +26,7 @@ gem 'pundit', '~> 2.1'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'rubocop', require: false 
-gem 'faker', '~> 2.18'
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
@@ -36,6 +36,10 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'bundle-audit', '~> 0.1.0'
   gem 'faker', '~> 2.18'
+
+  gem 'factory_bot_rails'
+  gem 'rspec-rails', '~> 5.0.0'
+  gem 'database_cleaner', '~> 1.5', '>= 1.5.3'
 end
 
 group :development do
@@ -48,6 +52,9 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'sentry-ruby'
+gem 'sentry-rails'
 
 gem 'sidekiq', '~> 6.2'
 gem 'sidekiq-cron', '~> 1.2'

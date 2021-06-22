@@ -84,7 +84,8 @@ User.create(
   phone_number: Faker::PhoneNumber.cell_phone,
   age: 18, 
   real_user: false, 
-  role: 'employee'
+  role: 'employee', 
+  password: 'admin'
 )
 User.create(
   email: 'admin@monterail.com',
@@ -93,7 +94,8 @@ User.create(
   phone_number: Faker::PhoneNumber.cell_phone,
   age: 18,
   real_user: true,
-  role: 'admin'
+  role: 'admin',
+  password: 'admin'
 )
 employees = (1..5).map do
   User.create(
@@ -103,7 +105,8 @@ employees = (1..5).map do
     phone_number: Faker::PhoneNumber.cell_phone,
     age: 18,
     real_user: true,
-    role: 'employee'
+    role: 'employee',
+    password: 'iloverails'
   )
 end
 users = (1..10).map do
@@ -114,7 +117,8 @@ users = (1..10).map do
     phone_number: Faker::PhoneNumber.cell_phone,
     age: rand(10..50),
     real_user: true,
-    role: 'client'
+    role: 'client',
+    password: 'iloverails'
   )
 end
 
@@ -159,38 +163,14 @@ screenings = (1..40).map do |id|
 end
 
 Reservations::UseCases::CreateOffline.new(
+  user: employees.sample,
   params: {
     ticket_desk_id: ticket_desks.sample[:id],
     screening_id: screenings[0].id,
     tickets: [
-      { price: 25,  ticket_type: 'normal', seat: 'A1' },
-      { price: 25,  ticket_type: 'normal', seat: 'A2' },
-      { price: 25,  ticket_type: 'normal', seat: 'A3' },
-      { price: 15,  ticket_type: 'child', seat: 'B1' },
-      { price: 15,  ticket_type: 'child', seat: 'B2' }
-    ]
-  }
-).call
-
-Reservations::UseCases::CreateOffline.new(
-  params: {
-    ticket_desk_id: ticket_desks.sample[:id],
-    screening_id: screenings[0].id,
-    tickets: [
-      { price: 25,  ticket_type: 'normal', seat: 'D1' },
-      { price: 25,  ticket_type: 'normal', seat: 'D2' },
-      { price: 25,  ticket_type: 'normal', seat: 'D3' },
-      { price: 15,  ticket_type: 'child', seat: 'D4' }
-    ]
-  }
-).call
-
-Reservations::UseCases::CreateOffline.new(
-  params: {
-    ticket_desk_id: ticket_desks.sample[:id],
-    screening_id: screenings[1].id,
-    tickets: [
-      { price: 15,  ticket_type: 'student', seat: 'D1' },
+      { price: 25,  ticket_type: 'normal', seat: 'D7' },
+      { price: 15,  ticket_type: 'child', seat: 'E1' },
+      { price: 15,  ticket_type: 'child', seat: 'E2' }
     ]
   }
 ).call
@@ -200,23 +180,8 @@ Reservations::UseCases::CreateOnline.new(
   params: {
     screening_id: screenings[0].id,
     tickets: [
-      { price: 20,  ticket_type: 'student', seat: 'E1' },
-      { price: 20,  ticket_type: 'student', seat: 'E2' },
-      { price: 20,  ticket_type: 'student', seat: 'E3' }
-    ]
-  }
-).call.paid!
-
-Reservations::UseCases::CreateOnline.new(
-  user: users.sample,
-  params: {
-    screening_id: screenings[1].id,
-    tickets: [
-      { price: 25,  ticket_type: 'normal', seat: 'B1' },
-      { price: 25,  ticket_type: 'normal', seat: 'B2' },
-      { price: 25,  ticket_type: 'normal', seat: 'B3' },
-      { price: 15,  ticket_type: 'child', seat: 'B9' },
-      { price: 15,  ticket_type: 'child', seat: 'B10' }
+      { price: 20,  ticket_type: 'student', seat: 'C6' },
+      { price: 20,  ticket_type: 'student', seat: 'C7' }
     ]
   }
 ).call.paid!
