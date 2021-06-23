@@ -10,10 +10,10 @@ module Reservations
       end
 
       def call(params:, user:, id:)
-        reservation = repository.new.find(id)
+        reservation = repository.find(id)
         raise Pundit::NotAuthorizedError unless ReservationPolicy.new(user, reservation).update?
 
-        repository.new.update(id, params)
+        repository.update(id, params)
       end
     end
   end
