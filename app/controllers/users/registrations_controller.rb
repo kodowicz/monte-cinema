@@ -17,14 +17,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if user.persisted?
       render json: { user: user }, status: :ok
     else
-      render json: { message: 'failed' }, status: :failed_request
+      render json: { message: "failed" }, status: :failed_request
     end
   end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(
       :sign_up,
-      keys: %i[first_name last_name role age phone_number real_user]
+      keys: %i(first_name last_name role age phone_number real_user),
     )
   end
 end

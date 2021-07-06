@@ -18,7 +18,7 @@ module Movies
     end
 
     def find_by(search:)
-      adapter.order(ratio: :desc).where('title ILIKE ?', "%#{search}%")
+      adapter.order(ratio: :desc).where("title ILIKE ?", "%#{search}%")
     end
 
     def find_filter(filter:)

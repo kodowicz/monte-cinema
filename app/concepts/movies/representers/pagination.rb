@@ -12,7 +12,7 @@ module Movies
         @pagy, @movies = pagy(
           @movies,
           page: pagination[:page],
-          items: pagination[:items]
+          items: pagination[:items],
         )
       end
 
@@ -21,7 +21,7 @@ module Movies
           info: info,
           movies: movies.map do |movie|
             Single.new(movie).basic
-          end
+          end,
         }
       end
 
@@ -30,7 +30,7 @@ module Movies
           info: info,
           movies: movies.map do |movie|
             Single.new(movie).extended
-          end
+          end,
         }
       end
 
@@ -41,7 +41,7 @@ module Movies
           current: @pagy.page,
           prev: @pagy.prev,
           next: @pagy.next,
-          last: @pagy.last
+          last: @pagy.last,
         }
       end
     end

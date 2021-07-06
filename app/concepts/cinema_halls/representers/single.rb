@@ -16,14 +16,14 @@ module CinemaHalls
           id: cinema_hall.id,
           name: cinema_hall.name,
           capacity: cinema_hall.capacity,
-          seats: seats
+          seats: seats,
         }
       end
 
       def extended
         {
           **basic,
-          screenings: screenings
+          screenings: screenings,
         }
       end
 
@@ -42,7 +42,7 @@ module CinemaHalls
           row.map do |seat|
             {
               seat: seat,
-              available: seat_available?(seat)
+              available: seat_available?(seat),
             }
           end
         end

@@ -23,38 +23,42 @@ class ReservationsController < ApplicationController
   end
 
   def create_online
-    reservation = Reservations::UseCases::CreateOnline.new(
-      user: current_user,
-      params: online_params
-    ).call
+    reservation = 
+      Reservations::UseCases::CreateOnline
+        .new(user: current_user, params: online_params)
+        .call
 
     render json: { reservation: Reservations::Representers::Single.new(reservation).extended }, status: :created
   end
 
   def create_offline
-    reservation = Reservations::UseCases::CreateOffline.new(
-      params: offline_params.merge({ ticket_desk_id: params[:ticket_desk_id] }),
-      user: current_user
-    ).call
+    reservation = 
+      Reservations::UseCases::CreateOffline.new(
+        params: offline_params.merge({ ticket_desk_id: params[:ticket_desk_id] }),
+        user: current_user,
+      ).call
 
     render json: { reservation: Reservations::Representers::Single.new(reservation).extended }, status: :created
   end
 
   def update
-    reservation = Reservations::UseCases::Update.new.call(
-      params: update_params,
-      user: current_user,
-      id: params[:id]
-    )
+    reservation = 
+      Reservations::UseCases::Update.new.call(
+        params: update_params,
+        user: current_user,
+        id: params[:id],
+      )
+
     render json: { reservation: Reservations::Representers::Single.new(reservation).basic }
   end
 
   def destroy
     Reservations::UseCases::Delete.new.call(
       user: current_user,
-      id: params[:id]
+      id: params[:id],
     )
-    render json: { message: 'Reservation canceled' }
+
+    render json: { message: "Reservation canceled" }
   end
 
   private
@@ -70,14 +74,14 @@ class ReservationsController < ApplicationController
   def online_params
     params.require(:reservation).permit(
       :screening_id,
-      tickets: %i[price ticket_type seat]
+      tickets: %i(price ticket_type seat),
     )
   end
 
   def offline_params
     params.require(:reservation).permit(
       :screening_id,
-      tickets: %i[price ticket_type seat]
+      tickets: %i(price ticket_type seat),
     )
   end
 

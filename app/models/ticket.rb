@@ -7,8 +7,8 @@ class Ticket < ApplicationRecord
 
   validates :seat, presence: true, format: {
     with: /^[A-Z]{1}\d{1,3}$/,
-    message: 'The row must be a letter and the column a number',
-    multiline: true
+    message: "The row must be a letter and the column a number",
+    multiline: true,
   }
   validates :ticket_type, presence: true
   validates :price, presence: true, numericality: { greater_than: 0.99 }

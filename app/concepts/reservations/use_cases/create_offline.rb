@@ -19,7 +19,7 @@ module Reservations
             Tickets::UseCases::CreateForReservation.new(
               tickets_params: params[:tickets],
               reservation: reservation,
-              screening: screening
+              screening: screening,
             ).call
           end
         end
@@ -33,7 +33,7 @@ module Reservations
           screening_id: params[:screening_id],
           user_id: offline_user.id,
           expires_at: expires_at,
-          status: 'paid'
+          status: "paid",
         }
       end
 

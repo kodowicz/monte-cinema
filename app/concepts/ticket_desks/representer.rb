@@ -11,7 +11,7 @@ module TicketDesks
     def basic
       {
         id: ticket_desk.id,
-        online: ticket_desk.online
+        online: ticket_desk.online,
       }
     end
   end

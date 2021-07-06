@@ -19,7 +19,7 @@ module Reservations
             Tickets::UseCases::CreateForReservation.new(
               tickets_params: params[:tickets],
               reservation: reservation,
-              screening: screening
+              screening: screening,
             ).call
 
             CancelReservationsJob.set(wait_until: expires_at).perform_later(reservation.id)
@@ -35,7 +35,7 @@ module Reservations
           user_id: user.id,
           ticket_desk_id: ticket_desk_online,
           expires_at: expires_at,
-          status: 'created'
+          status: "created",
         }
       end
 

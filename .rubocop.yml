@@ -1,11 +1,14 @@
+require: rubocop-rspec
+
 AllCops:
-  TargetRubyVersion: 2.7.0
+  DisplayCopNames: true
+  TargetRubyVersion: 2.7
+  NewCops: enable
   Exclude:
     - 'app/channels/**/*'
     - 'config/**/*'
     - 'bin/**/*'
     - 'db/**/*'
-    - 'spec/**/*'
     - 'Rakefile'
     - 'Gemfile'
     - 'config.ru'
@@ -17,9 +20,104 @@ Style/Documentation:
   Enabled: false
 
 Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Migration/DepartmentName:
   Enabled: false
 
-# Layout/EndOfLine:
-#   Exclude:
-#     - 'app/models/**/*'
-    # - 'app/controllers/application_controller.rb'
+Style/MultilineBlockChain:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+
+Layout/EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/EmptyMethod:
+  Enabled: false
+
+Style/SingleLineBlockParams:
+  Enabled: false
+
+Style/ParallelAssignment:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Style/SafeNavigation:
+  Enabled: false
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Naming/BinaryOperatorParameterName:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 25
+
+Metrics/BlockLength:
+  Max: 30
+  IgnoredMethods: ['describe', 'context']
+
+Metrics/MethodLength:
+  Max: 25
+
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/ModuleLength:
+  Max: 150
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+
+Lint/AssignmentInCondition:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%i': '()'
+    '%w': '()'
+    '%W': '()'
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/EmptyLineAfterHook:
+  Enabled: true
+
+RSpec/EmptyLineAfterExampleGroup:
+  Enabled: true
+
+RSpec/VerifiedDoubles:
+  Enabled: false

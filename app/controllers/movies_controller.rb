@@ -8,17 +8,15 @@ class MoviesController < ApplicationController
     movies = Movies::UseCases::FindOrder.new(params: movies_params).call
 
     if movies_params[:extended]
-      render json: {
-        movies: Movies::Representers::Pagination.new(
-          movies: movies, pagination: movies_params[:pagination]
-        ).extended
-      }
+      render json:
+        Movies::Representers::Pagination
+          .new(movies: movies, pagination: movies_params[:pagination])
+          .extended
     else
-      render json: {
-        movies: Movies::Representers::Pagination.new(
-          movies: movies, pagination: movies_params[:pagination]
-        ).basic
-      }
+      render json:
+        Movies::Representers::Pagination
+          .new(movies: movies, pagination: movies_params[:pagination])
+          .basic
     end
   end
 
@@ -26,17 +24,15 @@ class MoviesController < ApplicationController
     movies = Movies::UseCases::FindPopular.new(params: popular_params).call
 
     if movies_params[:extended]
-      render json: {
-        movies: Movies::Representers::Pagination.new(
-          movies: movies, pagination: popular_params[:pagination]
-        ).extended
-      }
+      render json:
+        Movies::Representers::Pagination
+          .new(movies: movies, pagination: popular_params[:pagination])
+          .extended
     else
-      render json: {
-        movies: Movies::Representers::Pagination.new(
-          movies: movies, pagination: popular_params[:pagination]
-        ).basic
-      }
+      render json:
+        Movies::Representers::Pagination
+          .new(movies: movies, pagination: popular_params[:pagination])
+          .basic
     end
   end
 
@@ -44,17 +40,15 @@ class MoviesController < ApplicationController
     movies = Movies::UseCases::Search.new(params: search_params).call
 
     if movies_params[:extended]
-      render json: {
-        movies: Movies::Representers::Pagination.new(
-          movies: movies, pagination: popular_params[:pagination]
-        ).extended
-      }
+      render json:
+        Movies::Representers::Pagination
+          .new(movies: movies, pagination: popular_params[:pagination])
+          .extended
     else
-      render json: {
-        movies: Movies::Representers::Pagination.new(
-          movies: movies, pagination: popular_params[:pagination]
-        ).basic
-      }
+      render json:
+        Movies::Representers::Pagination
+          .new(movies: movies, pagination: popular_params[:pagination])
+          .basic
     end
   end
 
@@ -66,27 +60,27 @@ class MoviesController < ApplicationController
   private
 
   def invalid_pagination(error)
-    render json: { error: 'invalid pagination', details: error }.to_json, status: :unprocessable_entity
+    render json: { error: "invalid pagination", details: error }.to_json, status: :unprocessable_entity
   end
 
   def invalid_order(error)
-    render json: { error: 'invalid  order', details: error }.to_json, status: :unprocessable_entity
+    render json: { error: "invalid  order", details: error }.to_json, status: :unprocessable_entity
   end
 
   def movies_params
-    params.require(:movie).permit(:extended, :order, pagination: %i[page items])
+    params.require(:movie).permit(:extended, :order, pagination: %i(page items))
   end
 
   def popular_params
-    params.require(:movie).permit(:ratio, :extended, pagination: %i[page items])
+    params.require(:movie).permit(:ratio, :extended, pagination: %i(page items))
   end
 
   def search_params
     params.require(:movie).permit(
       :extended,
       :search,
-      pagination: %i[page items],
-      filter: %i[genre_id display_type_id voice_type_id]
+      pagination: %i(page items),
+      filter: %i(genre_id display_type_id voice_type_id),
     )
   end
 end

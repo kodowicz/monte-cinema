@@ -12,7 +12,7 @@ module Screenings
       def call
         {
           taken: taken_seats,
-          available: available_seats
+          available: available_seats,
         }
       end
 

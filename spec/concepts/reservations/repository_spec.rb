@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Reservations::Repository do
-  describe '.create!' do
+  describe ".create!" do
     let(:instance) { described_class.new }
     let(:params) { attributes_for :reservation }
 
-    it 'creates reservation' do
+    it "creates reservation" do
       expect(instance.create!(params)).to be_a_kind_of(Reservation)
     end
   end

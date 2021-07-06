@@ -16,13 +16,13 @@ module Tickets
       def call
         Ticket.transaction do
           raise SeatsNotAvailableError, "Can't create reservation without tickets" if tickets_params.empty?
-          raise SeatsNotAvailableError, 'Every seats are taken' if available_seats.empty?
-          raise SeatsNotAvailableError, 'Provided seat are not available' unless available?
+          raise SeatsNotAvailableError, "Every seats are taken" if available_seats.empty?
+          raise SeatsNotAvailableError, "Provided seat are not available" unless available?
 
           tickets_params.each do |params|
             reservation.tickets.create!(params)
           rescue ActiveRecord::RecordInvalid
-            raise SeatsNotAvailableError, 'Provided parameters are invalid'
+            raise SeatsNotAvailableError, "Provided parameters are invalid"
           end
         end
       end

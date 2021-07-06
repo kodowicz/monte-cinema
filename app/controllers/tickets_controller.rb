@@ -6,7 +6,7 @@ class TicketsController < ApplicationController
   def index
     tickets = Tickets::UseCases::FindFilter.new.call(
       filter: { reservation_id: params[:reservation_id] },
-      user: current_user
+      user: current_user,
     )
 
     render json: Tickets::Representers::All.new(tickets).basic
