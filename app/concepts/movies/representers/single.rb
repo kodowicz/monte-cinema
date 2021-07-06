@@ -16,7 +16,7 @@ module Movies
           genre: movie.genre.name,
           duration: movie.duration,
           age_restriction: movie.age_restriction,
-          poster: movie.poster
+          poster: movie.poster,
         }
       end
 
@@ -26,7 +26,7 @@ module Movies
           trailer: movie.trailer,
           production: movie.production,
           description: movie.description,
-          screenings: screenings
+          screenings: screenings,
         }
       end
 

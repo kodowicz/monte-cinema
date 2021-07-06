@@ -14,14 +14,14 @@ module Screenings
           id: screening.id,
           starts_at: format_date,
           cinema_hall_id: screening.cinema_hall_id,
-          movie_id: screening.movie_id
+          movie_id: screening.movie_id,
         }
       end
 
       def extended
         {
           **basic,
-          seats: seats
+          seats: seats,
         }
       end
 

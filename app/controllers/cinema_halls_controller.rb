@@ -34,11 +34,12 @@ class CinemaHallsController < ApplicationController
   end
 
   def update
-    cinema_hall = CinemaHalls::UseCases::Update.new.call(
-      id: params[:id],
-      params: permit_params,
-      user: current_user
-    )
+    cinema_hall = 
+      CinemaHalls::UseCases::Update.new.call(
+        id: params[:id],
+        params: permit_params,
+        user: current_user,
+      )
 
     if cinema_hall.valid?
       render json: { hall: CinemaHalls::Representers::Single.new(cinema_hall).basic }
@@ -61,7 +62,7 @@ class CinemaHallsController < ApplicationController
       rows: [],
       columns: [],
       not_available: [],
-      seats: []
+      seats: [],
     )
   end
 end

@@ -6,8 +6,8 @@ module Movies
       ValidationError = Class.new StandardError
 
       ERROR_MESSAGES = {
-        unprovided_pagination: 'You need to specify page and items',
-        invalid_pagination: 'You provided wrong variables'
+        unprovided_pagination: "You need to specify page and items",
+        invalid_pagination: "You provided wrong variables",
       }.freeze
 
       def initialize(pagination:)
@@ -36,7 +36,7 @@ module Movies
       end
 
       def pagination_provided?
-        pagination.key?('items' && 'page') && pagination.values.all?(&:present?)
+        pagination.key?("items" && "page") && pagination.values.all?(&:present?)
       end
 
       def pagination_valid?

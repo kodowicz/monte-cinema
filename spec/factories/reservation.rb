@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :reservation do
-    status { 'paid' }
+    status { "paid" }
     expires_at { Time.current + 1.hour }
     user { create(:user) }
     screening { create(:screening) }
@@ -8,11 +10,11 @@ FactoryBot.define do
   end
 
   factory :paid_reservation, parent: :reservation do
-    status { 'paid' }
+    status { "paid" }
   end
 
   factory :unpaid_reservation, parent: :reservation do
-    status { 'created' }
+    status { "created" }
   end
 
   trait :with_tickets do

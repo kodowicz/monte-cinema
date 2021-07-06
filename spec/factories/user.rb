@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :user do
     sequence(:email) { Faker::Internet.email }
@@ -6,15 +8,15 @@ FactoryBot.define do
     last_name { Faker::Name.last_name }
     age { rand(10..50) }
     real_user { true }
-    role { 'client' }
+    role { "client" }
   end
 
   factory :admin, parent: :user do
-    role { 'admin' }
+    role { "admin" }
   end
 
   factory :emplyee, parent: :user do
-    role { 'employee' }
+    role { "employee" }
   end
 
   factory :fake_user, parent: :user do

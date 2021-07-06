@@ -27,11 +27,11 @@ module Movies
 
       def search_by_screening
         case params[:filter].keys.first
-        when 'genre_id'
+        when "genre_id"
           repository.find_filter(filter: params[:filter])
-        when 'display_type_id'
+        when "display_type_id"
           repository.join_filter(filter: display_type)
-        when 'voice_type_id'
+        when "voice_type_id"
           repository.join_filter(filter: voice_type)
         end
       end

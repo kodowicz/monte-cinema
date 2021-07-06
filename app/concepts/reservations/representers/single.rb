@@ -13,14 +13,14 @@ module Reservations
         {
           id: reservation.id,
           status: reservation.status,
-          expires_at: format_date
+          expires_at: format_date,
         }
       end
 
       def extended
         {
           **basic,
-          tickets: tickets
+          tickets: tickets,
         }
       end
 

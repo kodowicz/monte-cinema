@@ -7,6 +7,6 @@ class ApplicationController < ActionController::API
   rescue_from Repository::Error, with: :user_not_authorized
 
   def user_not_authorized
-    render json: { error: 'This action is not permitted' }.to_json, status: :unauthorized
+    render json: { error: "This action is not permitted" }.to_json, status: :unauthorized
   end
 end

@@ -16,7 +16,7 @@ module Tickets
           price: ticket.price,
           ticket_type: ticket.ticket_type,
           movie: movie,
-          hall: hall
+          hall: hall,
         }
       end
 
