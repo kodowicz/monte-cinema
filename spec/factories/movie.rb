@@ -12,7 +12,7 @@ FactoryBot.define do
     age_restriction { rand(0..18) }
     duration { rand(120..200) }
     ratio { rand(1..10) }
-    genre { create(:genre) }
+    genre
 
     trait :with_screenings do
       after :create do |movie, _|

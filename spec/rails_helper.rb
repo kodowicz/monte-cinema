@@ -42,7 +42,7 @@ RSpec.configure do |config|
   end
 
   config.before :all do
-    create(:ticket_desk, online: true)
+    create(:ticket_desk_online)
   end
 
   config.after :all do
