@@ -5,7 +5,7 @@ module CinemaHalls
     class Create
       attr_reader :repository, :user
 
-      def initialize(repository: Repository.new)
+      def initialize(repository: CinemaHalls::Repository.new)
         @repository = repository
       end
 

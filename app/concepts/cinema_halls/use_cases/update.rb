@@ -5,12 +5,12 @@ module CinemaHalls
     class Update
       attr_reader :repository
 
-      def initialize(repository: Repository.new)
+      def initialize(repository: CinemaHalls::Repository.new)
         @repository = repository
       end
 
       def call(id:, params:)
-        cinema_hall = repository.new.find(id)
+        cinema_hall = repository.find(id)
         raise Pundit::NotAuthorizedError unless CinemaHallPolicy.new(user, cinema_hall).update?
 
         repository.update(id, params)

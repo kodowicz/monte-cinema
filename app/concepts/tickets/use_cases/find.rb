@@ -5,7 +5,7 @@ module Tickets
     class Find
       attr_reader :repository
 
-      def initialize(repository: Repository.new)
+      def initialize(repository: Tickets::Repository.new)
         @repository = repository
       end
 
