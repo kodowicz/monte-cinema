@@ -5,12 +5,12 @@ module Tickets
     class Delete
       attr_reader :repository
 
-      def initialize(repository: Repository.new)
+      def initialize(repository: Tickets::Repository.new)
         @repository = repository
       end
 
       def call(id:, user:)
-        ticket = repository.new.find(id)
+        ticket = repository.find(id)
         raise Pundit::NotAuthorizedError unless TicketPolicy.new(user, ticket).destroy?
 
         repository.delete(id)

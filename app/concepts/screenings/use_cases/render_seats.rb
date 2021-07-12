@@ -18,12 +18,16 @@ module Screenings
 
       private
 
+      def repository
+        Screenings::Repository.new
+      end
+
       def available_seats
-        Repository.new.available_seats(screening)
+        repository.available_seats(screening)
       end
 
       def taken_seats
-        Repository.new.taken_seats(screening)
+        repository.taken_seats(screening)
       end
     end
   end

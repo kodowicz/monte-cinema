@@ -5,7 +5,7 @@ module Reservations
     class Update
       attr_reader :repository
 
-      def initialize(repository: Repository.new)
+      def initialize(repository: Reservations::Repository.new)
         @repository = repository
       end
 

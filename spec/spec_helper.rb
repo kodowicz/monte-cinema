@@ -1,12 +1,13 @@
-require 'simplecov'
-# require 'pundit/rspec'
+# frozen_string_literal: true
 
-SimpleCov.start 'rails' do
-  add_filter '/app/channels/'
+require "simplecov"
+require "devise/jwt/test_helpers"
+
+SimpleCov.start "rails" do
+  add_filter "/app/channels/"
 end
 
 RSpec.configure do |config|
-
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
@@ -15,5 +16,4 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
   config.shared_context_metadata_behavior = :apply_to_host_groups
-
 end

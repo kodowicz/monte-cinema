@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Screenings
-  class Repository < ::Base::BaseRepository
+  class Repository < ::Repository::Base
     attr_reader :adapter
 
     def initialize(adapter: Screening)

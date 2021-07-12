@@ -5,6 +5,6 @@ FactoryBot.define do
     price { 20 }
     seat { "A1" }
     ticket_type { "normal" }
-    reservation { create(:reservation) }
+    reservation
   end
 end
